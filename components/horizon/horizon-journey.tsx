@@ -37,8 +37,7 @@ export function HorizonJourney() {
   return (
     <div
       ref={containerRef}
-      style={{ height: `${TOTAL_WIDTH_VW}vh` }}
-      className="relative"
+      style={{ height: `${TOTAL_WIDTH_VW}vh`, position: "relative" }}
     >
       {/* Sticky viewport */}
       <div className="sticky top-0 h-screen w-screen overflow-hidden">
