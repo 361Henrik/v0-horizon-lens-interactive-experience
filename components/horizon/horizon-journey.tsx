@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef } from "react"
-import { useScroll, useTransform, motion } from "framer-motion"
+import { useRef, useEffect, useState } from "react"
+import { useScroll, useTransform, useMotionValue, motion } from "framer-motion"
 import { VerticalSelector } from "./vertical-selector"
 import { PhaseOlga } from "./phase-olga"
 import { PhaseTransition } from "./phase-transition"
@@ -13,23 +13,46 @@ const TOTAL_WIDTH_VW = 600
 
 export function HorizonJourney() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const scrollProgress = useMotionValue(0)
+  const [mounted, setMounted] = useState(false)
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  })
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
+    const handleScroll = () => {
+      const el = containerRef.current
+      if (!el) return
+
+      const rect = el.getBoundingClientRect()
+      const scrollableHeight = el.offsetHeight - window.innerHeight
+      const scrolled = -rect.top
+
+      if (scrollableHeight <= 0) return
+
+      const progress = Math.min(Math.max(scrolled / scrollableHeight, 0), 1)
+      scrollProgress.set(progress)
+    }
+
+    handleScroll()
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [mounted, scrollProgress])
 
   // Convert vertical scroll to horizontal translation
   const translatePercent = ((TOTAL_WIDTH_VW - 100) / TOTAL_WIDTH_VW) * 100
   const x = useTransform(
-    scrollYProgress,
+    scrollProgress,
     [0, 1],
     ["0%", `-${translatePercent}%`]
   )
 
   // Parallax: background moves at 35% speed
   const bgX = useTransform(
-    scrollYProgress,
+    scrollProgress,
     [0, 1],
     ["0%", `-${translatePercent * 0.35}%`]
   )
@@ -37,7 +60,8 @@ export function HorizonJourney() {
   return (
     <div
       ref={containerRef}
-      style={{ height: `${TOTAL_WIDTH_VW}vh`, position: "relative" }}
+      style={{ height: `${TOTAL_WIDTH_VW}vh` }}
+      className="relative"
     >
       {/* Sticky viewport */}
       <div className="sticky top-0 h-screen w-screen overflow-hidden">
@@ -86,23 +110,23 @@ export function HorizonJourney() {
           className="absolute top-0 left-0 h-full flex"
         >
           {/* Segment 0: Landing Selector */}
-          <VerticalSelector scrollProgress={scrollYProgress} />
+          <VerticalSelector scrollProgress={scrollProgress} />
 
           {/* Segment 1: Phase I - Olga Architect */}
-          <PhaseOlga scrollProgress={scrollYProgress} />
+          <PhaseOlga scrollProgress={scrollProgress} />
 
           {/* Segment 2: Phase II - Publishing Transition */}
-          <PhaseTransition scrollProgress={scrollYProgress} />
+          <PhaseTransition scrollProgress={scrollProgress} />
 
           {/* Segment 3: Phase III - Helmut Experience */}
-          <PhaseHelmut scrollProgress={scrollYProgress} />
+          <PhaseHelmut scrollProgress={scrollProgress} />
 
           {/* Segment 4: Phase IV - Conclusion & CTA */}
-          <PhaseConclusion scrollProgress={scrollYProgress} />
+          <PhaseConclusion scrollProgress={scrollProgress} />
         </motion.div>
 
         {/* Progress bar (fixed UI) */}
-        <ProgressBar scrollProgress={scrollYProgress} />
+        <ProgressBar scrollProgress={scrollProgress} />
       </div>
     </div>
   )
