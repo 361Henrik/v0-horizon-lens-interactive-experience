@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 8%;
+    --foreground: 40 30% 95%;
+    --card: 220 15% 12%;
+    --card-foreground: 40 30% 95%;
+    --popover: 220 15% 12%;
+    --popover-foreground: 40 30% 95%;
+    --primary: 35 80% 55%;
+    --primary-foreground: 220 20% 8%;
+    --secondary: 260 10% 18%;
+    --secondary-foreground: 40 30% 90%;
+    --muted: 260 10% 25%;
+    --muted-foreground: 40 10% 60%;
+    --accent: 35 80% 55%;
+    --accent-foreground: 220 20% 8%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 10% 20%;
+    --input: 220 15% 15%;
+    --ring: 35 80% 55%;
+    --chart-1: 35 80% 55%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.75rem;
+    --sidebar-background: 220 20% 6%;
+    --sidebar-foreground: 40 30% 95%;
+    --sidebar-primary: 35 80% 55%;
+    --sidebar-primary-foreground: 220 20% 8%;
+    --sidebar-accent: 260 10% 15%;
+    --sidebar-accent-foreground: 40 30% 95%;
+    --sidebar-border: 40 10% 15%;
+    --sidebar-ring: 35 80% 55%;
+
+    --glass: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.12);
+    --gold-glow: rgba(205, 160, 60, 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-geist), system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .glass-panel {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .glass-panel-strong {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+  }
+  .gold-glow {
+    box-shadow: 0 0 30px var(--gold-glow), 0 0 60px rgba(205, 160, 60, 0.15);
+  }
+  .gold-text {
+    background: linear-gradient(135deg, hsl(40, 60%, 70%), hsl(35, 80%, 55%), hsl(30, 70%, 45%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
