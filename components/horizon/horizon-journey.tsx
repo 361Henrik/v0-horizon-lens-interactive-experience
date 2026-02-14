@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useEffect, useState } from "react"
-import { useScroll, useTransform, useMotionValue, motion } from "framer-motion"
+import { useTransform, useMotionValue, motion } from "framer-motion"
 import { VerticalSelector } from "./vertical-selector"
 import { PhaseOlga } from "./phase-olga"
 import { PhaseTransition } from "./phase-transition"
@@ -64,7 +64,7 @@ export function HorizonJourney() {
       className="relative"
     >
       {/* Sticky viewport */}
-      <div className="sticky top-0 h-screen w-screen overflow-hidden">
+      <div className="sticky top-0 h-screen w-screen overflow-hidden relative">
         {/* Background parallax layer */}
         <motion.div
           style={{ x: bgX }}
