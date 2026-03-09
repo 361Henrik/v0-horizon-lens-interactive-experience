@@ -808,7 +808,11 @@ export function PhaseHelmut({ scrollProgress }: PhaseHelmutProps) {
         style={{ opacity: panelOpacity }}
         className="absolute left-[6vw] top-1/2 -translate-y-1/2 z-20"
       >
-        <SceneNarrativePanel scrollProgress={scrollProgress} />
+        <SceneNarrativePanel
+          scrollProgress={scrollProgress}
+          scenes={scenes}
+          poiCategories={t.phaseHelmut.poiCategories}
+        />
       </motion.div>
 
       {/* CENTER: iPhone — opacity/scale wrapper, never translates */}
@@ -848,7 +852,7 @@ export function PhaseHelmut({ scrollProgress }: PhaseHelmutProps) {
         style={{ opacity: panelOpacity }}
         className="absolute right-[6vw] top-1/2 -translate-y-1/2 z-20"
       >
-        <SceneContextPanel scrollProgress={scrollProgress} />
+        <SceneContextPanel scrollProgress={scrollProgress} scenes={scenes} />
       </motion.div>
     </div>
   )
