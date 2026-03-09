@@ -403,15 +403,15 @@ export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
             <span className="text-[10px] uppercase tracking-[0.4em] text-primary/60 font-sans">
               Ready to Transform Your Guest Experience?
             </span>
-            <h2 className="font-serif text-4xl md:text-5xl font-semibold leading-tight text-balance">
-              <span className="shimmer-text">Every Mile,</span>
-              <br />
-              <span className="text-foreground">A Story Told</span>
-            </h2>
-            <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-              Join Viking, Scenic, and other premium operators who have
-              transformed passive sightseeing into interactive storytelling.
-            </p>
+          <h2 className="font-serif text-4xl md:text-5xl font-semibold leading-tight text-balance">
+            <span className="shimmer-text">A Hill Is Just a Hill</span>
+            <br />
+            <span className="text-foreground">Until You Know Its Story</span>
+          </h2>
+          <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
+            Join Viking, Scenic, and other premium operators who use Curated Lens
+            to transform passive sightseeing into real-time location storytelling.
+          </p>
           </div>
 
           <MagneticButton>

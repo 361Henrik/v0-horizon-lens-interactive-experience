@@ -262,7 +262,7 @@ export function PhaseTransition({ scrollProgress }: PhaseTransitionProps) {
               <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
             </div>
             <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-mono ml-3">
-              horizon-lens publish
+              curated-lens publish
             </span>
             <div className="ml-auto flex items-center gap-2">
               <span className="text-[9px] text-emerald-400/60 font-mono">

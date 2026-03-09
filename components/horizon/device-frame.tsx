@@ -46,7 +46,6 @@ interface IPhoneFrameProps {
   children: ReactNode
   opacity?: MotionValue<number>
   scale?: MotionValue<number>
-  rotate?: MotionValue<number>
   className?: string
 }
 
@@ -54,12 +53,11 @@ export function IPhoneFrame({
   children,
   opacity,
   scale,
-  rotate,
   className = "",
 }: IPhoneFrameProps) {
   return (
     <motion.div
-      style={{ opacity, scale, rotate }}
+      style={{ opacity, scale }}
       className={`relative flex items-center justify-center ${className}`}
     >
       <div className="relative w-[320px] max-w-[40vw]">

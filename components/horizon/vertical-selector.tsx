@@ -135,7 +135,7 @@ export function VerticalSelector({ scrollProgress, isReady = true }: VerticalSel
                 animate={showContent ? { x: 0, opacity: 1 } : {}}
                 transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
-                Horizon
+                Curated
               </motion.span>{" "}
               <motion.span
                 className="text-foreground inline-block"
@@ -153,10 +153,10 @@ export function VerticalSelector({ scrollProgress, isReady = true }: VerticalSel
             >
               {showContent && (
                 <>
-                  <TypewriterText text="Transform every mile into a story worth telling." delay={800} />
+                  <TypewriterText text="Discover the stories around you." delay={800} />
                   <br />
                   <span className="text-foreground/60">
-                    The AI-powered storytelling engine for premium travel.
+                    Location-aware storytelling that reveals the meaning behind every landmark.
                   </span>
                 </>
               )}

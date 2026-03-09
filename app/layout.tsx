@@ -21,9 +21,9 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "Horizon Lens | Premium Travel Storytelling Platform",
+  title: "Curated Lens | Discover the Stories Around You",
   description:
-    "Transform every mile into a story worth telling. Horizon Lens is the AI-powered content engine for luxury river cruise, ocean cruise, and rail operators.",
+    "A hill is just a hill until you know its story. Curated Lens is the AI-powered location storytelling platform that reveals points of interest, history, and experiences for premium travelers.",
 }
 
 export const viewport: Viewport = {
