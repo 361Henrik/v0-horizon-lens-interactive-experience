@@ -130,7 +130,7 @@ function ConnectionDiagram({ progress, operatorLabel, travelerLabel }: { progres
           <motion.div
             className="w-6 h-6 rounded-full bg-background border border-border/50 flex items-center justify-center"
             animate={{ 
-              borderColor: progress > 0.4 && progress < 0.6 ? "hsl(var(--primary))" : "hsl(var(--border) / 0.5)"
+              borderColor: progress > 0.4 && progress < 0.6 ? "rgba(52, 211, 153, 1)" : "rgba(255, 255, 255, 0.1)"
             }}
           >
             <Cloud className="w-3 h-3 text-muted-foreground" />
