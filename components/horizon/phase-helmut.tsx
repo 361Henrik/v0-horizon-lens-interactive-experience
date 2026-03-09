@@ -4,7 +4,23 @@ import * as React from "react"
 import { type MotionValue, useTransform, motion, AnimatePresence } from "framer-motion"
 import { IPhoneFrame } from "./device-frame"
 
-// POI category icon system — minimalist SVG line icons
+// ---------------------------------------------------------------------------
+// Shared image source — the single hero asset used as the environment scene.
+// Every phone screen that acts as a camera view uses EXACTLY these values so
+// the inner crop matches what the parallax background is showing.
+// ---------------------------------------------------------------------------
+const SCENE_IMAGE = "/images/hero-bg.jpeg"
+
+// The outer parallax background is positioned at "?% 60%".
+// We mirror that here so the phone feels like a window into the same scene.
+// Portrait: show sky+castle centered (40% x, 38% y — castle in upper-right)
+// Landscape: show the full width band at natural horizon line (50% x, 45% y)
+const PORTRAIT_BG_POS = "62% 38%"   // castle stays upper-right of frame
+const LANDSCAPE_BG_POS = "50% 45%"  // horizon-level panoramic strip
+
+// ---------------------------------------------------------------------------
+// POI Icons
+// ---------------------------------------------------------------------------
 function PoiIcon({ type, className = "w-5 h-5" }: { type: string; className?: string }) {
   const icons: Record<string, React.ReactNode> = {
     history: (
@@ -55,19 +71,10 @@ function PoiIcon({ type, className = "w-5 h-5" }: { type: string; className?: st
   return <>{icons[type] ?? icons.history}</>
 }
 
-// POI category pill with animated hover/active state
 function PoiCategoryPill({
-  type,
-  label,
-  isActive,
-  delay = 0,
-  inView,
+  type, label, isActive, delay = 0, inView,
 }: {
-  type: string
-  label: string
-  isActive: boolean
-  delay?: number
-  inView: boolean
+  type: string; label: string; isActive: boolean; delay?: number; inView: boolean
 }) {
   return (
     <motion.div
@@ -80,10 +87,7 @@ function PoiCategoryPill({
           : "border-border/30 bg-muted/10 text-muted-foreground hover:border-primary/30 hover:text-foreground"
       }`}
     >
-      <motion.div
-        animate={isActive ? { scale: [1, 1.15, 1] } : {}}
-        transition={{ duration: 1.8, repeat: Infinity }}
-      >
+      <motion.div animate={isActive ? { scale: [1, 1.15, 1] } : {}} transition={{ duration: 1.8, repeat: Infinity }}>
         <PoiIcon type={type} className="w-4 h-4" />
       </motion.div>
       <span className="text-[11px] font-sans">{label}</span>
@@ -99,312 +103,404 @@ function PoiCategoryPill({
   )
 }
 
-// --- PHONE SCREEN CONTENT for each scene ---
+// ---------------------------------------------------------------------------
+// SCENE SCREENS
+// Each screen that shows the environment uses PORTRAIT_BG_POS so it always
+// matches the outer parallax. Scene 4 (landscape) uses LANDSCAPE_BG_POS and
+// is rendered upright inside the rotated phone wrapper.
+// ---------------------------------------------------------------------------
 
-function Scene1Screen({ progress }: { progress: number }) {
+// Shared "live viewfinder" chrome for scenes that act as camera mode
+function CameraViewfinder({
+  bgPos,
+  progress,
+  children,
+  label,
+}: {
+  bgPos: string
+  progress: number
+  children?: React.ReactNode
+  label?: string
+}) {
   return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-card to-background relative overflow-hidden">
-      {/* Status bar */}
-      <div className="flex justify-between px-4 pt-10 pb-2 shrink-0">
-        <span className="text-[8px] text-foreground/40 font-mono">9:41</span>
-        <span className="text-[8px] text-primary/60 font-mono">Curated Lens</span>
-      </div>
+    <div className="w-full h-full relative overflow-hidden">
+      {/* The environment image — positioned to match outer background */}
+      <div
+        className="absolute inset-0 bg-cover transition-all duration-700"
+        style={{
+          backgroundImage: `url(${SCENE_IMAGE})`,
+          backgroundPosition: bgPos,
+          transform: `scale(${1.04 + progress * 0.04})`,
+          transformOrigin: "center center",
+        }}
+      />
 
-      {/* Background landscape photo */}
-      <div className="flex-1 relative mx-3 rounded-2xl overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center scale-110"
-          style={{
-            backgroundImage: "url(/images/hero-bg.jpeg)",
-            transform: `scale(${1.1 + progress * 0.05})`,
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+      {/* Subtle dark layer for UI readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background/75 via-background/20 to-background/30" />
 
-        {/* Question overlay */}
-        <motion.div
-          className="absolute bottom-4 inset-x-4"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: progress > 0.3 ? 1 : 0, y: progress > 0.3 ? 0 : 10 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="bg-background/80 backdrop-blur-sm rounded-xl p-3 border border-border/30">
-            <p className="text-[11px] text-foreground font-sans">
-              &ldquo;What is that castle on the hill?&rdquo;
-            </p>
-            <div className="mt-2 flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-[9px] text-primary/70 font-mono">Scanning surroundings...</span>
-            </div>
+      {/* Camera corner brackets (viewfinder aesthetic) */}
+      <div className="absolute top-12 left-3 w-5 h-5 border-t-2 border-l-2 border-primary/60 rounded-tl" />
+      <div className="absolute top-12 right-3 w-5 h-5 border-t-2 border-r-2 border-primary/60 rounded-tr" />
+      <div className="absolute bottom-6 left-3 w-5 h-5 border-b-2 border-l-2 border-primary/60 rounded-bl" />
+      <div className="absolute bottom-6 right-3 w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br" />
+
+      {/* Optional label top-right */}
+      {label && (
+        <div className="absolute top-[52px] inset-x-0 flex justify-center">
+          <div className="px-2 py-0.5 rounded-full bg-background/60 border border-border/30 text-[7px] font-mono text-foreground/60 tracking-wider uppercase">
+            {label}
           </div>
-        </motion.div>
-      </div>
+        </div>
+      )}
 
-      <div className="px-4 pb-4 pt-2 shrink-0">
-        <div className="text-[9px] text-muted-foreground font-sans text-center">Tap anything you see</div>
-      </div>
+      {children}
     </div>
   )
 }
 
-function Scene2Screen({ progress }: { progress: number }) {
-  const pois = [
-    { type: "history", label: "Marksburg Castle", distance: "0.2 km", conf: 98 },
-    { type: "nature", label: "Rhine Gorge", distance: "0.4 km", conf: 95 },
-    { type: "culture", label: "Medieval Village", distance: "1.1 km", conf: 91 },
-    { type: "food", label: "Vineyard Estate", distance: "2.3 km", conf: 87 },
-  ]
-
+// Scene 1 — Discovery: phone shows viewfinder with "what is that?" prompt
+function Scene1Screen({ progress }: { progress: number }) {
   return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-card to-background p-3 relative">
-      <div className="flex justify-between px-1 pt-8 pb-3 shrink-0">
-        <span className="text-[8px] text-foreground/40 font-mono">9:41</span>
-        <span className="text-[8px] text-primary/60 font-mono">Detecting POIs</span>
+    <CameraViewfinder bgPos={PORTRAIT_BG_POS} progress={progress} label="Live Camera">
+      {/* Status bar */}
+      <div className="absolute top-0 inset-x-0 flex justify-between px-4 pt-10 pb-1">
+        <span className="text-[8px] text-white/50 font-mono">9:41</span>
+        <span className="text-[8px] text-primary/70 font-mono">Curated Lens</span>
       </div>
 
-      {/* Detection pulse ring */}
+      {/* Scanning indicator anchored near the castle (upper-right area) */}
       <motion.div
-        className="relative w-16 h-16 mx-auto mb-3 shrink-0"
-        animate={{ opacity: 1 }}
+        className="absolute top-[28%] right-[22%]"
+        animate={{ opacity: [0.4, 1, 0.4] }}
+        transition={{ duration: 2, repeat: Infinity }}
       >
-        {[0, 1, 2].map((i) => (
+        {[0, 1].map((i) => (
           <motion.div
             key={i}
-            className="absolute inset-0 rounded-full border border-primary/40"
-            animate={{ scale: [1, 2.5], opacity: [0.6, 0] }}
-            transition={{ duration: 2, repeat: Infinity, delay: i * 0.65 }}
+            className="absolute inset-0 w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/60"
+            animate={{ scale: [1, 2.2], opacity: [0.7, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.9 }}
           />
         ))}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-            <div className="w-4 h-4 rounded-full bg-primary/60" />
+        <div className="w-3 h-3 rounded-full bg-primary/80 border-2 border-background" />
+      </motion.div>
+
+      {/* Question card at bottom */}
+      <motion.div
+        className="absolute bottom-8 inset-x-4"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: progress > 0.25 ? 1 : 0, y: progress > 0.25 ? 0 : 12 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="bg-background/80 backdrop-blur-sm rounded-xl p-3 border border-border/30">
+          <p className="text-[11px] text-foreground font-sans">
+            &ldquo;What is that castle on the hill?&rdquo;
+          </p>
+          <div className="mt-2 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-[9px] text-primary/70 font-mono">Scanning surroundings...</span>
           </div>
         </div>
       </motion.div>
+    </CameraViewfinder>
+  )
+}
 
-      <div className="flex-1 space-y-1.5 overflow-hidden">
-        {pois.map((poi, i) => (
+// Scene 2 — POI Detection: translucent AR overlay on top of live view
+function Scene2Screen({ progress }: { progress: number }) {
+  const pois = [
+    { type: "history", label: "Marksburg Castle", distance: "0.2 km", conf: 98, x: "68%", y: "25%" },
+    { type: "nature",  label: "Rhine Gorge",      distance: "0.4 km", conf: 95, x: "40%", y: "48%" },
+    { type: "culture", label: "Medieval Village", distance: "1.1 km", conf: 91, x: "55%", y: "55%" },
+    { type: "food",    label: "Vineyard Estate",  distance: "2.3 km", conf: 87, x: "25%", y: "40%" },
+  ]
+
+  return (
+    <CameraViewfinder bgPos={PORTRAIT_BG_POS} progress={progress} label="AR Scan">
+      {/* Status bar */}
+      <div className="absolute top-0 inset-x-0 flex justify-between px-4 pt-10 pb-1">
+        <span className="text-[8px] text-white/50 font-mono">9:41</span>
+        <span className="text-[8px] text-primary/70 font-mono">Detecting POIs</span>
+      </div>
+
+      {/* AR pin labels positioned over the actual scenery */}
+      {pois.map((poi, i) => (
+        <motion.div
+          key={i}
+          className="absolute"
+          style={{ left: poi.x, top: poi.y, transform: "translate(-50%, -50%)" }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{
+            opacity: progress > (i + 1) * 0.22 ? 1 : 0,
+            scale:   progress > (i + 1) * 0.22 ? 1 : 0,
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          {/* Pulse ring */}
           <motion.div
-            key={i}
-            initial={{ opacity: 0, x: 16 }}
-            animate={{
-              opacity: progress > (i + 1) * 0.22 ? 1 : 0,
-              x: progress > (i + 1) * 0.22 ? 0 : 16,
-            }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 px-2.5 py-2 rounded-xl bg-muted/20 border border-border/20"
-          >
-            <div className="w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center text-primary shrink-0">
-              <PoiIcon type={poi.type} className="w-3.5 h-3.5" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[10px] font-medium text-foreground truncate">{poi.label}</div>
-              <div className="text-[8px] text-muted-foreground">{poi.distance}</div>
-            </div>
-            <div className="text-[8px] text-primary/70 font-mono shrink-0">{poi.conf}%</div>
-          </motion.div>
-        ))}
+            className="absolute inset-0 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/50"
+            animate={{ scale: [1, 2], opacity: [0.6, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          />
+          <div className="w-5 h-5 rounded-full bg-primary/90 border-2 border-background flex items-center justify-center">
+            <PoiIcon type={poi.type} className="w-2.5 h-2.5 text-background" />
+          </div>
+          {/* Label chip */}
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-background/85 backdrop-blur-sm px-1.5 py-0.5 rounded text-[7px] text-foreground whitespace-nowrap border border-border/30">
+            {poi.label} · {poi.distance}
+          </div>
+        </motion.div>
+      ))}
+
+      {/* Confidence meter bottom strip */}
+      <motion.div
+        className="absolute bottom-6 inset-x-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: progress > 0.6 ? 1 : 0 }}
+      >
+        <div className="bg-background/75 backdrop-blur-sm rounded-xl p-2 border border-border/20 flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-primary animate-pulse shrink-0" />
+          <span className="text-[8px] text-primary font-mono">{pois.length} POIs detected</span>
+          <span className="text-[7px] text-muted-foreground ml-auto font-mono">&gt;95% confidence</span>
+        </div>
+      </motion.div>
+    </CameraViewfinder>
+  )
+}
+
+// Scene 3 — Contextual Story: focused crop on castle, story card overlay
+function Scene3Screen({ progress }: { progress: number }) {
+  return (
+    <CameraViewfinder bgPos={PORTRAIT_BG_POS} progress={progress} label="Story Mode">
+      {/* Status bar */}
+      <div className="absolute top-0 inset-x-0 flex justify-between px-4 pt-10 pb-1">
+        <span className="text-[8px] text-white/50 font-mono">9:41</span>
+        <span className="text-[8px] text-primary/70 font-mono">Marksburg Castle</span>
+      </div>
+
+      {/* Castle lock-on ring in upper-right where it appears in the image */}
+      <motion.div
+        className="absolute top-[20%] right-[18%] w-14 h-14 -translate-x-1/2 -translate-y-1/2"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: progress > 0.1 ? 1 : 0, scale: progress > 0.1 ? 1 : 0.5 }}
+        transition={{ type: "spring", stiffness: 200, damping: 18 }}
+      >
+        <svg viewBox="0 0 56 56" className="w-full h-full" fill="none">
+          <rect x="2" y="2" width="12" height="12" stroke="hsl(var(--primary))" strokeWidth="2" />
+          <rect x="42" y="2" width="12" height="12" stroke="hsl(var(--primary))" strokeWidth="2" />
+          <rect x="2" y="42" width="12" height="12" stroke="hsl(var(--primary))" strokeWidth="2" />
+          <rect x="42" y="42" width="12" height="12" stroke="hsl(var(--primary))" strokeWidth="2" />
+          <motion.circle
+            cx="28" cy="28" r="6"
+            fill="hsl(var(--primary) / 0.4)"
+            stroke="hsl(var(--primary))"
+            strokeWidth="1.5"
+            animate={{ r: [6, 8, 6] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          />
+        </svg>
+      </motion.div>
+
+      {/* Story card slides up from bottom */}
+      <motion.div
+        className="absolute bottom-5 inset-x-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: progress > 0.2 ? 1 : 0, y: progress > 0.2 ? 0 : 20 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="bg-background/85 backdrop-blur-md rounded-xl p-3 border border-border/30">
+          <h3 className="text-[12px] font-serif font-semibold text-foreground mb-1">Marksburg Castle</h3>
+          <p className="text-[9px] text-muted-foreground leading-relaxed mb-2">
+            The only Rhine hilltop fortress never destroyed. Standing since 1117 AD, it has silently watched
+            centuries of empires rise and fall.
+          </p>
+          {/* Fact pills */}
+          <div className="flex flex-wrap gap-1 mb-2">
+            {["1117 AD", "Never destroyed", "UNESCO"].map((tag, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: progress > 0.45 + i * 0.1 ? 1 : 0, scale: progress > 0.45 + i * 0.1 ? 1 : 0.8 }}
+                className="px-1.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[7px] text-primary"
+              >
+                {tag}
+              </motion.div>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <button className="flex-1 py-1.5 rounded-lg bg-primary/20 border border-primary/30 text-[9px] text-primary font-sans">
+              Audio Story
+            </button>
+            <button className="flex-1 py-1.5 rounded-lg border border-border/30 text-[9px] text-muted-foreground font-sans">
+              Deep Dive
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </CameraViewfinder>
+  )
+}
+
+// Scene 4 — Panoramic / Landscape mode
+// KEY FIX: The phone rotates -90deg in its parent wrapper.
+// The content inside must be authored in portrait dimensions but visually
+// fill a landscape viewport. We counter-rotate the image layer +90deg and
+// use object-cover semantics so the horizon stays horizontal.
+// Result: phone tilts sideways, but the image and all UI text remain upright.
+function Scene4Screen({ progress }: { progress: number }) {
+  const pins = [
+    { x: "18%", y: "38%", label: "Keep Tower" },
+    { x: "52%", y: "32%", label: "Great Hall"  },
+    { x: "78%", y: "28%", label: "Rhine View"  },
+  ]
+
+  return (
+    // Counter-rotate so everything stays upright after the phone wrapper rotates -90deg
+    <div className="w-full h-full relative overflow-hidden" style={{ transform: "rotate(90deg)" }}>
+      {/* 
+        Image: use LANDSCAPE_BG_POS. The counter-rotation means this div is
+        effectively wider than tall from the viewer's perspective — which gives
+        the natural panoramic crop automatically.
+      */}
+      <div
+        className="absolute inset-0 bg-cover transition-all duration-700"
+        style={{
+          backgroundImage: `url(${SCENE_IMAGE})`,
+          backgroundPosition: `${50 + progress * 15}% ${LANDSCAPE_BG_POS.split(" ")[1]}`,
+          transform: `scale(1.08)`,
+          transformOrigin: "center center",
+        }}
+      />
+
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/25 via-transparent to-background/70" />
+
+      {/* Camera brackets */}
+      <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-primary/60 rounded-tl" />
+      <div className="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-primary/60 rounded-tr" />
+      <div className="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-primary/60 rounded-bl" />
+      <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-primary/60 rounded-br" />
+
+      {/* Mode label */}
+      <div className="absolute top-4 inset-x-0 flex justify-center">
+        <div className="px-2 py-0.5 rounded-full bg-background/60 border border-border/30 text-[7px] font-mono text-foreground/60 uppercase tracking-wider">
+          Panoramic Mode
+        </div>
+      </div>
+
+      {/* Status bar */}
+      <div className="absolute top-0 inset-x-0 flex justify-between px-4 pt-10 pb-1">
+        <span className="text-[8px] text-white/50 font-mono">9:41</span>
+        <span className="text-[8px] text-primary/70 font-mono">Landscape View</span>
+      </div>
+
+      {/* Annotation pins */}
+      {pins.map((pin, i) => (
+        <motion.div
+          key={i}
+          className="absolute"
+          style={{ left: pin.x, top: pin.y, transform: "translate(-50%, -50%)" }}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{
+            scale:   progress > (i + 1) * 0.28 ? 1 : 0,
+            opacity: progress > (i + 1) * 0.28 ? 1 : 0,
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          <div className="w-5 h-5 rounded-full bg-primary/90 border-2 border-background flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-background" />
+          </div>
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-background/90 px-1.5 py-0.5 rounded text-[7px] text-foreground whitespace-nowrap border border-border/20">
+            {pin.label}
+          </div>
+        </motion.div>
+      ))}
+
+      {/* Bottom strip */}
+      <div className="absolute bottom-4 inset-x-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: progress > 0.4 ? 1 : 0 }}
+          className="bg-background/75 backdrop-blur-sm rounded-xl p-2 border border-border/20"
+        >
+          <div className="text-[9px] font-serif text-foreground">Marksburg Castle — Full Story</div>
+          <div className="text-[7px] text-muted-foreground mt-0.5">Explore every corner of the fortress</div>
+        </motion.div>
       </div>
     </div>
   )
 }
 
-function Scene3Screen({ progress }: { progress: number }) {
+// Scene 5 — Local Connection: real photo card teasers
+function Scene5Screen({ progress }: { progress: number }) {
+  const cards = [
+    { type: "experience", label: "Castle Tour",      detail: "Daily 10am–5pm",         price: "€18" },
+    { type: "food",       label: "Vineyard Tasting", detail: "Private cellar experience", price: "€45" },
+    { type: "local",      label: "Village Market",   detail: "Fresh produce & crafts",  price: "Free" },
+    { type: "culture",    label: "Folk Concert",     detail: "Tonight 8pm riverside",   price: "€22" },
+  ]
+
   return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-card to-background relative overflow-hidden">
-      <div className="flex justify-between px-4 pt-10 pb-2 shrink-0">
-        <span className="text-[8px] text-foreground/40 font-mono">9:41</span>
-        <span className="text-[8px] text-primary/60 font-mono">Marksburg Castle</span>
-      </div>
+    <div className="w-full h-full flex flex-col relative overflow-hidden">
+      {/* Faint scene behind as ambient context */}
+      <div
+        className="absolute inset-0 bg-cover opacity-20"
+        style={{ backgroundImage: `url(${SCENE_IMAGE})`, backgroundPosition: PORTRAIT_BG_POS }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/90 to-background/95" />
 
-      {/* Hero image */}
-      <div className="mx-3 h-28 rounded-xl overflow-hidden relative shrink-0">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url(/images/hero-bg.jpeg)" }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-        <div className="absolute bottom-2 left-3">
-          <span className="text-[8px] uppercase tracking-wider text-primary/80 font-sans">History</span>
+      {/* Content */}
+      <div className="relative flex flex-col h-full p-3">
+        <div className="flex justify-between px-1 pt-8 pb-2 shrink-0">
+          <span className="text-[8px] text-foreground/40 font-mono">9:41</span>
+          <span className="text-[8px] text-primary/60 font-mono">Nearby Experiences</span>
         </div>
-      </div>
 
-      {/* Story text */}
-      <motion.div
-        className="flex-1 px-3 pt-3 space-y-2 overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: progress > 0.25 ? 1 : 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h3 className="text-[12px] font-serif font-semibold text-foreground">Marksburg Castle</h3>
-        <p className="text-[9px] text-muted-foreground leading-relaxed">
-          The only Rhine hilltop fortress never destroyed. Standing since 1117 AD, it has silently watched
-          centuries of empires rise and fall along this valley.
-        </p>
-
-        {/* Quick fact pills */}
-        <div className="flex flex-wrap gap-1.5 mt-2">
-          {["1117 AD", "Never destroyed", "Rhine gorge", "UNESCO site"].map((tag, i) => (
+        <div className="flex-1 space-y-1.5 overflow-hidden">
+          {cards.map((card, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: progress > 0.4 + i * 0.1 ? 1 : 0, scale: progress > 0.4 + i * 0.1 ? 1 : 0.8 }}
-              className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[8px] text-primary"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: progress > i * 0.22 ? 1 : 0, y: progress > i * 0.22 ? 0 : 8 }}
+              transition={{ duration: 0.35 }}
+              className="flex items-center gap-2.5 p-2.5 rounded-xl border border-border/20 bg-muted/10"
             >
-              {tag}
+              <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center text-primary shrink-0">
+                <PoiIcon type={card.type} className="w-4 h-4" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] font-medium text-foreground">{card.label}</div>
+                <div className="text-[8px] text-muted-foreground truncate">{card.detail}</div>
+              </div>
+              <div className="text-[9px] text-primary font-mono shrink-0">{card.price}</div>
             </motion.div>
           ))}
         </div>
-      </motion.div>
 
-      {/* Action row */}
-      <motion.div
-        className="px-3 pb-5 pt-2 flex gap-2 shrink-0"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: progress > 0.6 ? 1 : 0, y: progress > 0.6 ? 0 : 10 }}
-      >
-        <button className="flex-1 py-2 rounded-xl bg-primary/20 border border-primary/30 text-[9px] text-primary font-sans">
-          Audio Story
-        </button>
-        <button className="flex-1 py-2 rounded-xl border border-border/30 text-[9px] text-muted-foreground font-sans">
-          Deep Dive
-        </button>
-      </motion.div>
-    </div>
-  )
-}
-
-function Scene4Screen({ progress }: { progress: number }) {
-  // Landscape mode (panoramic deep-dive)
-  const pins = [
-    { x: 18, y: 28, label: "Keep Tower" },
-    { x: 52, y: 40, label: "Great Hall" },
-    { x: 78, y: 33, label: "Rhine View" },
-  ]
-
-  return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-card to-background relative overflow-hidden">
-      {/* Panoramic image */}
-      <div className="flex-1 relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover"
-          style={{
-            backgroundImage: "url(/images/hero-bg.jpeg)",
-            backgroundPosition: `${progress * 30}% 40%`,
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/90" />
-
-        {/* Annotation pins */}
-        {pins.map((pin, i) => (
-          <motion.div
-            key={i}
-            className="absolute"
-            style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{
-              scale: progress > (i + 1) * 0.28 ? 1 : 0,
-              opacity: progress > (i + 1) * 0.28 ? 1 : 0,
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          >
-            <div className="w-5 h-5 rounded-full bg-primary/90 border-2 border-background flex items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-background" />
-            </div>
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-background/90 px-1.5 py-0.5 rounded text-[7px] text-foreground whitespace-nowrap">
-              {pin.label}
-            </div>
-          </motion.div>
-        ))}
-
-        {/* "Rotate" label in landscape mode */}
-        <div className="absolute top-3 inset-x-0 flex justify-center">
-          <div className="px-2 py-1 rounded-full bg-background/70 text-[7px] text-foreground border border-border/30">
-            Panoramic View — Landscape Mode
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom info strip */}
-      <div className="px-3 py-2 shrink-0">
-        <div className="text-[9px] font-serif text-foreground">Marksburg Castle — Full Story</div>
-        <div className="text-[8px] text-muted-foreground mt-0.5">Explore every corner of the fortress</div>
+        <motion.div
+          className="mt-2 py-2 rounded-xl bg-primary/20 border border-primary/30 text-center text-[9px] text-primary font-sans shrink-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: progress > 0.8 ? 1 : 0 }}
+        >
+          Book Through Curated Lens
+        </motion.div>
       </div>
     </div>
   )
 }
 
-function Scene5Screen({ progress }: { progress: number }) {
-  const cards = [
-    { type: "experience", label: "Castle Tour", detail: "Daily 10am–5pm", price: "€18" },
-    { type: "food", label: "Vineyard Tasting", detail: "Private cellar experience", price: "€45" },
-    { type: "local", label: "Village Market", detail: "Fresh produce & crafts", price: "Free" },
-    { type: "culture", label: "Folk Concert", detail: "Tonight 8pm riverside", price: "€22" },
-  ]
-
-  return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-card to-background p-3">
-      <div className="flex justify-between px-1 pt-8 pb-2 shrink-0">
-        <span className="text-[8px] text-foreground/40 font-mono">9:41</span>
-        <span className="text-[8px] text-primary/60 font-mono">Nearby Experiences</span>
-      </div>
-
-      <div className="flex-1 space-y-1.5 overflow-hidden">
-        {cards.map((card, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{
-              opacity: progress > i * 0.22 ? 1 : 0,
-              y: progress > i * 0.22 ? 0 : 8,
-            }}
-            transition={{ duration: 0.35 }}
-            className="flex items-center gap-2.5 p-2.5 rounded-xl border border-border/20 bg-muted/10"
-          >
-            <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center text-primary shrink-0">
-              <PoiIcon type={card.type} className="w-4 h-4" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[10px] font-medium text-foreground">{card.label}</div>
-              <div className="text-[8px] text-muted-foreground truncate">{card.detail}</div>
-            </div>
-            <div className="text-[9px] text-primary font-mono shrink-0">{card.price}</div>
-          </motion.div>
-        ))}
-      </div>
-
-      <motion.div
-        className="mt-2 py-2 rounded-xl bg-primary/20 border border-primary/30 text-center text-[9px] text-primary font-sans shrink-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: progress > 0.8 ? 1 : 0 }}
-      >
-        Book Through Curated Lens
-      </motion.div>
-    </div>
-  )
-}
-
-// Helper to convert a motion value to a React state number
-function useProgressValue(mv: MotionValue<number>, range: [number, number]): number {
-  const innerMv = useTransform(mv, range, [0, 1])
-  const [val, setVal] = React.useState(0)
-  React.useEffect(() => {
-    const clamp = (v: number) => Math.min(1, Math.max(0, v))
-    setVal(clamp(innerMv.get()))
-    return innerMv.on("change", (v) => setVal(clamp(v)))
-  }, [innerMv])
-  return val
-}
-
-// The scenes definition
+// ---------------------------------------------------------------------------
+// Scenes definition
+// ---------------------------------------------------------------------------
 const scenes = [
   {
     id: "discovery",
     range: [0.53, 0.62] as [number, number],
     title: "Discovery",
-    subtitle: "What is that mountain?",
+    subtitle: "What is that castle on the hill?",
     narrative:
-      "Your traveler sees the Rhine landscape and wonders what that glowing castle on the hill might be.",
-    leftCategory: { type: "history", label: "History" },
+      "Your traveler sees the Rhine landscape and wonders what that glowing fortress on the hilltop might be. They raise their phone.",
     activeCategory: "history",
-    categories: ["history", "nature", "culture", "food", "experience", "weather", "local"],
     Screen: Scene1Screen,
     isLandscape: false,
   },
@@ -414,10 +510,8 @@ const scenes = [
     title: "POI Detection",
     subtitle: "The system identifies landmarks",
     narrative:
-      "Curated Lens scans the surroundings in real time, detecting every point of interest within range.",
-    leftCategory: { type: "nature", label: "Nature" },
+      "Curated Lens overlays AR markers directly onto the live camera view, pinning every point of interest in real time.",
     activeCategory: "nature",
-    categories: ["history", "nature", "culture", "food", "experience", "weather", "local"],
     Screen: Scene2Screen,
     isLandscape: false,
   },
@@ -427,10 +521,8 @@ const scenes = [
     title: "Contextual Story",
     subtitle: "Stories, facts and history appear",
     narrative:
-      "Rich verified content surfaces instantly — audio narration, quick facts, and deep dives.",
-    leftCategory: { type: "culture", label: "Culture" },
+      "Rich verified content surfaces instantly — audio narration, quick facts, and deep dives anchored to the exact landmark in frame.",
     activeCategory: "culture",
-    categories: ["history", "nature", "culture", "food", "experience", "weather", "local"],
     Screen: Scene3Screen,
     isLandscape: false,
   },
@@ -438,12 +530,10 @@ const scenes = [
     id: "exploration",
     range: [0.77, 0.83] as [number, number],
     title: "Panoramic Exploration",
-    subtitle: "Landscape mode, full story",
+    subtitle: "Landscape mode — full story",
     narrative:
-      "Rotate to landscape for a cinematic deep-dive with annotated panoramic view of the landmark.",
-    leftCategory: { type: "weather", label: "Geography" },
+      "Rotate to landscape for a cinematic deep-dive. The image stays level and correctly oriented as annotation pins appear over the scene.",
     activeCategory: "weather",
-    categories: ["history", "nature", "culture", "food", "experience", "weather", "local"],
     Screen: Scene4Screen,
     isLandscape: true,
   },
@@ -453,21 +543,17 @@ const scenes = [
     title: "Local Connection",
     subtitle: "Experiences, tours, food nearby",
     narrative:
-      "Beyond stories — curated local experiences, tours, and products surface from trusted operators.",
-    leftCategory: { type: "local", label: "Local" },
+      "Beyond stories — curated local experiences, tours, and products surface from trusted operators connected to your route.",
     activeCategory: "experience",
-    categories: ["history", "nature", "culture", "food", "experience", "weather", "local"],
     Screen: Scene5Screen,
     isLandscape: false,
   },
 ]
 
-// Single phone screen — switches content based on which scene is active
-function PhoneScreenContent({
-  scrollProgress,
-}: {
-  scrollProgress: MotionValue<number>
-}) {
+// ---------------------------------------------------------------------------
+// PhoneScreenContent — single phone slot, swaps scene content
+// ---------------------------------------------------------------------------
+function PhoneScreenContent({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
   const [activeScene, setActiveScene] = React.useState(0)
   const [sceneProgress, setSceneProgress] = React.useState(0)
 
@@ -505,21 +591,15 @@ function PhoneScreenContent({
   )
 }
 
-// Scene narrative panel (left side)
-function SceneNarrativePanel({
-  scrollProgress,
-}: {
-  scrollProgress: MotionValue<number>
-}) {
+// ---------------------------------------------------------------------------
+// Narrative + Context panels
+// ---------------------------------------------------------------------------
+function SceneNarrativePanel({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
   const [activeScene, setActiveScene] = React.useState(0)
-
   React.useEffect(() => {
     return scrollProgress.on("change", (v) => {
       for (let i = scenes.length - 1; i >= 0; i--) {
-        if (v >= scenes[i].range[0]) {
-          setActiveScene(i)
-          return
-        }
+        if (v >= scenes[i].range[0]) { setActiveScene(i); return }
       }
     })
   }, [scrollProgress])
@@ -536,7 +616,6 @@ function SceneNarrativePanel({
         exit={{ opacity: 0, x: 30 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        {/* Scene counter */}
         <div className="flex items-center gap-2">
           <span className="text-[10px] uppercase tracking-[0.3em] text-primary/60 font-sans">
             Scene {String(activeScene + 1).padStart(2, "0")}
@@ -556,15 +635,14 @@ function SceneNarrativePanel({
           </p>
         </div>
 
-        {/* POI category icons grid */}
         <div className="grid grid-cols-2 gap-2">
           {[
-            { type: "history", label: "History" },
-            { type: "nature", label: "Nature" },
-            { type: "food", label: "Food" },
-            { type: "culture", label: "Culture" },
+            { type: "history",    label: "History"     },
+            { type: "nature",     label: "Nature"      },
+            { type: "food",       label: "Food"        },
+            { type: "culture",    label: "Culture"     },
             { type: "experience", label: "Experiences" },
-            { type: "local", label: "Local" },
+            { type: "local",      label: "Local"       },
           ].map((cat, i) => (
             <PoiCategoryPill
               key={cat.type}
@@ -577,17 +655,12 @@ function SceneNarrativePanel({
           ))}
         </div>
 
-        {/* Scene dots */}
         <div className="flex items-center gap-2">
           {scenes.map((s, i) => (
             <div
               key={s.id}
               className={`h-1 rounded-full transition-all duration-500 ${
-                i === activeScene
-                  ? "w-6 bg-primary"
-                  : i < activeScene
-                  ? "w-2 bg-primary/50"
-                  : "w-2 bg-muted/40"
+                i === activeScene ? "w-6 bg-primary" : i < activeScene ? "w-2 bg-primary/50" : "w-2 bg-muted/40"
               }`}
             />
           ))}
@@ -597,33 +670,23 @@ function SceneNarrativePanel({
   )
 }
 
-// Scene contextual panel (right side)
-function SceneContextPanel({
-  scrollProgress,
-}: {
-  scrollProgress: MotionValue<number>
-}) {
+function SceneContextPanel({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
   const [activeScene, setActiveScene] = React.useState(0)
-
   React.useEffect(() => {
     return scrollProgress.on("change", (v) => {
       for (let i = scenes.length - 1; i >= 0; i--) {
-        if (v >= scenes[i].range[0]) {
-          setActiveScene(i)
-          return
-        }
+        if (v >= scenes[i].range[0]) { setActiveScene(i); return }
       }
     })
   }, [scrollProgress])
 
   const contextContent = [
-    { stat: "247", label: "POIs detected", sub: "along Rhine corridor" },
-    { stat: "4", label: "Content layers", sub: "per landmark" },
-    { stat: "98%", label: "Confidence", sub: "AI accuracy rate" },
-    { stat: "< 1s", label: "Response", sub: "real-time detection" },
-    { stat: "360°", label: "Coverage", sub: "panoramic exploration" },
+    { stat: "247",  label: "POIs detected",    sub: "along Rhine corridor"   },
+    { stat: "4",    label: "Content layers",   sub: "per landmark"           },
+    { stat: "98%",  label: "Confidence",       sub: "AI accuracy rate"       },
+    { stat: "< 1s", label: "Response",         sub: "real-time detection"    },
+    { stat: "360°", label: "Coverage",         sub: "panoramic exploration"  },
   ]
-
   const ctx = contextContent[activeScene] ?? contextContent[0]
 
   return (
@@ -636,14 +699,12 @@ function SceneContextPanel({
         exit={{ opacity: 0, x: -30 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        {/* Big stat */}
         <div className="glass-panel rounded-2xl p-4 text-center">
           <div className="font-serif text-4xl text-primary mb-1">{ctx.stat}</div>
           <div className="text-[10px] text-foreground font-sans font-medium">{ctx.label}</div>
           <div className="text-[9px] text-muted-foreground font-sans">{ctx.sub}</div>
         </div>
 
-        {/* POI glow indicators */}
         <div className="space-y-2">
           {["Marksburg Castle", "Rhine Gorge", "St. Goar", "Vineyard"].map((name, i) => (
             <motion.div
@@ -655,13 +716,7 @@ function SceneContextPanel({
             >
               <motion.div
                 className="w-2 h-2 rounded-full bg-primary shrink-0"
-                animate={{
-                  boxShadow: [
-                    "0 0 0px hsl(var(--primary) / 0)",
-                    "0 0 8px hsl(var(--primary) / 0.8)",
-                    "0 0 0px hsl(var(--primary) / 0)",
-                  ],
-                }}
+                animate={{ boxShadow: ["0 0 0px hsl(var(--primary) / 0)", "0 0 8px hsl(var(--primary) / 0.8)", "0 0 0px hsl(var(--primary) / 0)"] }}
                 transition={{ duration: 2, repeat: Infinity, delay: i * 0.4 }}
               />
               <span className="text-[10px] text-muted-foreground font-sans">{name}</span>
@@ -673,13 +728,16 @@ function SceneContextPanel({
   )
 }
 
+// ---------------------------------------------------------------------------
+// PhaseHelmut — main export
+// ---------------------------------------------------------------------------
 interface PhaseHelmutProps {
   scrollProgress: MotionValue<number>
 }
 
 export function PhaseHelmut({ scrollProgress }: PhaseHelmutProps) {
   const phaseStart = scenes[0].range[0]
-  const phaseEnd = scenes[scenes.length - 1].range[1]
+  const phaseEnd   = scenes[scenes.length - 1].range[1]
 
   const phoneOpacity = useTransform(
     scrollProgress,
@@ -692,18 +750,17 @@ export function PhaseHelmut({ scrollProgress }: PhaseHelmutProps) {
     [0.92, 1, 1, 0.92]
   )
 
-  // Rotation: only for the panoramic scene (scene index 3), anchored at center
-  const [isLandscape, setIsLandscape] = React.useState(false)
-  React.useEffect(() => {
-    return scrollProgress.on("change", (v) => {
-      const panoramic = scenes[3]
-      setIsLandscape(v >= panoramic.range[0] && v < panoramic.range[1])
-    })
-  }, [scrollProgress])
-
+  // Phone rotation — only for scene 4 (panoramic)
+  // Rotate the phone body -90deg. Content inside counter-rotates +90deg
+  // so the imagery and UI text stay upright (see Scene4Screen).
   const phoneRotate = useTransform(
     scrollProgress,
-    [scenes[3].range[0], scenes[3].range[0] + 0.025, scenes[3].range[1] - 0.025, scenes[3].range[1]],
+    [
+      scenes[3].range[0],
+      scenes[3].range[0] + 0.025,
+      scenes[3].range[1] - 0.025,
+      scenes[3].range[1],
+    ],
     [0, -90, -90, 0]
   )
 
@@ -733,17 +790,20 @@ export function PhaseHelmut({ scrollProgress }: PhaseHelmutProps) {
         <SceneNarrativePanel scrollProgress={scrollProgress} />
       </motion.div>
 
-      {/* CENTER: iPhone — fixed and anchored, never moves */}
+      {/* CENTER: iPhone — opacity/scale wrapper, never translates */}
       <div className="relative z-20 flex items-center justify-center">
         <motion.div
           style={{ opacity: phoneOpacity, scale: phoneScale }}
           className="flex items-center justify-center"
         >
-          {/* Rotation wrapper — rotates around the phone's own center */}
+          {/* 
+            Rotation wrapper: rotates the phone body around its own center.
+            springConfig is applied via transition on the motion.div.
+          */}
           <motion.div
             style={{ rotate: phoneRotate }}
-            transition={{ type: "spring", stiffness: 120, damping: 20 }}
             className="flex items-center justify-center"
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
           >
             <IPhoneFrame>
               <div className="relative w-full h-full overflow-hidden rounded-[2rem]">
@@ -754,16 +814,10 @@ export function PhaseHelmut({ scrollProgress }: PhaseHelmutProps) {
         </motion.div>
 
         {/* Ambient glow behind phone */}
-        <motion.div
-          style={{ opacity: phoneOpacity }}
-          className="absolute inset-0 -z-10 pointer-events-none"
-        >
+        <motion.div style={{ opacity: phoneOpacity }} className="absolute inset-0 -z-10 pointer-events-none">
           <div
             className="absolute inset-[-40px] rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%)",
-            }}
+            style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%)" }}
           />
         </motion.div>
       </div>

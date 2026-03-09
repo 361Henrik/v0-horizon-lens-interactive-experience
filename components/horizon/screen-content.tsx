@@ -390,8 +390,8 @@ export function AudioPlayerScreen({ progress }: { progress: number }) {
       {/* Album art */}
       <div className="w-24 h-24 rounded-xl overflow-hidden mb-3 relative">
         <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/images/hero-bg.jpeg)" }}
+          className="absolute inset-0 bg-cover"
+          style={{ backgroundImage: "url(/images/hero-bg.jpeg)", backgroundPosition: "62% 38%" }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
         
@@ -472,8 +472,8 @@ export function ProximityScreen({ progress }: { progress: number }) {
         className="flex-1 rounded-xl overflow-hidden border border-border/30 relative"
       >
         <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/images/hero-bg.jpeg)" }}
+          className="absolute inset-0 bg-cover"
+          style={{ backgroundImage: "url(/images/hero-bg.jpeg)", backgroundPosition: "62% 38%" }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         
