@@ -5,6 +5,7 @@ import { type MotionValue, useTransform, motion, useSpring } from "framer-motion
 import { BarChart3, BookOpen, ArrowRight, Shield } from "lucide-react"
 import { MacBookFrame } from "./device-frame"
 import { VoiceBubble } from "./voice-bubble"
+import { useI18n } from "@/lib/i18n"
 
 interface PhaseConclusionProps {
   scrollProgress: MotionValue<number>
@@ -152,7 +153,7 @@ function MagneticButton({ children }: { children: React.ReactNode }) {
 }
 
 // 3D Journal component
-function Journal3D({ opacity }: { opacity: MotionValue<number> }) {
+function Journal3D({ opacity, title, subtitle, route, yourJourney }: { opacity: MotionValue<number>; title: string; subtitle: string; route: string; yourJourney: string }) {
   const [isHovered, setIsHovered] = React.useState(false)
 
   return (
@@ -174,22 +175,22 @@ function Journal3D({ opacity }: { opacity: MotionValue<number> }) {
         }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
       >
-        <div className="flex items-center gap-3 mb-4">
-          <motion.div
-            animate={{ rotate: isHovered ? 10 : 0 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <BookOpen className="w-5 h-5 text-primary" />
-          </motion.div>
-          <div>
-            <h4 className="font-serif text-sm font-semibold text-foreground">
-              Digital Travel Journal
-            </h4>
-            <p className="text-[10px] text-muted-foreground">
-              Branded keepsake for every guest
-            </p>
+          <div className="flex items-center gap-3 mb-4">
+            <motion.div
+              animate={{ rotate: isHovered ? 10 : 0 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <BookOpen className="w-5 h-5 text-primary" />
+            </motion.div>
+            <div>
+              <h4 className="font-serif text-sm font-semibold text-foreground">
+                {title}
+              </h4>
+              <p className="text-[10px] text-muted-foreground">
+                {subtitle}
+              </p>
+            </div>
           </div>
-        </div>
         
         {/* Journal mockup with parallax content */}
         <motion.div 
@@ -210,10 +211,10 @@ function Journal3D({ opacity }: { opacity: MotionValue<number> }) {
             className="flex flex-col items-center"
           >
             <span className="text-[10px] uppercase tracking-[0.3em] text-primary/60 font-sans">
-              Rhine Valley
+              {route}
             </span>
             <span className="font-serif text-lg text-foreground mt-1">
-              Your Journey
+              {yourJourney}
             </span>
             <div className="w-8 h-0.5 bg-primary/40 mt-2 rounded-full" />
           </motion.div>
@@ -241,6 +242,7 @@ function Journal3D({ opacity }: { opacity: MotionValue<number> }) {
 }
 
 export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
+  const { t } = useI18n()
   // Track progress for counter animations
   const [currentProgress, setCurrentProgress] = React.useState(0)
   
@@ -306,10 +308,10 @@ export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="font-serif text-base font-semibold text-foreground">
-                    Engagement Insights
+                    {t.phaseConclusion.insightsTitle}
                   </h3>
                   <p className="text-[10px] text-muted-foreground mt-0.5">
-                    Rhine Valley Route — Last 30 Days
+                    {t.phaseConclusion.insightsSubtitle}
                   </p>
                 </div>
                 <motion.div
@@ -323,10 +325,10 @@ export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
               {/* Chart bars with gradient and glow */}
               <div className="flex-1 flex flex-col justify-center gap-3">
                 {[
-                  { label: "Marksburg Castle", bar: bar1, pct: 85 },
-                  { label: "Lorelei Rock", bar: bar2, pct: 62 },
-                  { label: "Bacharach Village", bar: bar3, pct: 94 },
-                  { label: "Drachenfels Ruins", bar: bar4, pct: 47 },
+                  { label: t.phaseConclusion.chartLabels.marksburg, bar: bar1, pct: 85 },
+                  { label: t.phaseConclusion.chartLabels.lorelei,   bar: bar2, pct: 62 },
+                  { label: t.phaseConclusion.chartLabels.bacharach,  bar: bar3, pct: 94 },
+                  { label: t.phaseConclusion.chartLabels.drachenfels, bar: bar4, pct: 47 },
                 ].map((item, i) => (
                   <div key={item.label} className="flex items-center gap-3">
                     <span className="text-[9px] text-muted-foreground w-24 text-right shrink-0">
@@ -356,9 +358,9 @@ export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
               {/* Stats row with animated counters */}
               <div className="flex justify-between mt-4 pt-3 border-t border-[var(--glass-border)]">
                 {[
-                  { label: "Total Interactions", value: 12847 },
-                  { label: "Avg. Time per POI", value: 154, suffix: "s" },
-                  { label: "Audio Listens", value: 8291 },
+                  { label: t.phaseConclusion.stats.interactions, value: 12847 },
+                  { label: t.phaseConclusion.stats.avgTime, value: 154, suffix: "s" },
+                  { label: t.phaseConclusion.stats.audioListens, value: 8291 },
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div className="text-sm font-semibold text-foreground">
@@ -380,7 +382,7 @@ export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
           {/* Voice bubble */}
           <div className="absolute -bottom-4 -right-8 z-30">
             <VoiceBubble
-              text="See what your guests truly cared about, and use it to improve every future voyage."
+              text={t.phaseConclusion.voiceInsights}
               opacity={insightsVoiceOpacity}
               y={insightsVoiceY}
             />
@@ -390,7 +392,13 @@ export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
 
       {/* Digital Journal Preview */}
       <div className="absolute left-[30vw] top-0 h-full flex items-center">
-        <Journal3D opacity={journalOpacity} />
+        <Journal3D
+          opacity={journalOpacity}
+          title={t.phaseConclusion.journalTitle}
+          subtitle={t.phaseConclusion.journalSubtitle}
+          route={t.phaseConclusion.journalRoute}
+          yourJourney={t.phaseConclusion.journalYourJourney}
+        />
       </div>
 
       {/* Final CTA */}
@@ -401,21 +409,20 @@ export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
         >
           <div className="flex flex-col items-center gap-3">
             <span className="text-[10px] uppercase tracking-[0.4em] text-primary/60 font-sans">
-              Ready to Transform Your Guest Experience?
+              {t.phaseConclusion.ctaEyebrow}
             </span>
           <h2 className="font-serif text-4xl md:text-5xl font-semibold leading-tight text-balance">
-            <span className="shimmer-text">A Hill Is Just a Hill</span>
+            <span className="shimmer-text">{t.phaseConclusion.ctaHeading1}</span>
             <br />
-            <span className="text-foreground">Until You Know Its Story</span>
+            <span className="text-foreground">{t.phaseConclusion.ctaHeading2}</span>
           </h2>
           <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-            Join Viking, Scenic, and other premium operators who use Curated Lens
-            to transform passive sightseeing into real-time location storytelling.
+            {t.phaseConclusion.ctaBody}
           </p>
           </div>
 
           <MagneticButton>
-            Schedule a Private Demo
+            {t.phaseConclusion.ctaButton}
           </MagneticButton>
 
           {/* Social proof */}
@@ -423,7 +430,7 @@ export function PhaseConclusion({ scrollProgress }: PhaseConclusionProps) {
             <div className="flex items-center gap-2">
               <Shield className="w-3 h-3 text-muted-foreground/40" />
               <p className="text-[10px] text-muted-foreground/60 uppercase tracking-[0.15em] font-sans">
-                Trusted by 40+ premium operators worldwide
+                {t.phaseConclusion.trustBadge}
               </p>
             </div>
             {/* Logo placeholders */}

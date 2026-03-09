@@ -4,24 +4,20 @@ import { useState, useEffect } from "react"
 import { motion, type MotionValue, useTransform } from "framer-motion"
 import { Ship, Anchor, Train } from "lucide-react"
 import { ScrollHint } from "./scroll-hint"
+import { useI18n } from "@/lib/i18n"
 
 interface VerticalSelectorProps {
   scrollProgress: MotionValue<number>
   isReady?: boolean
 }
 
-const travelModes = [
-  { label: "River Cruise", icon: Ship, active: true },
-  { label: "Ocean Cruise", icon: Anchor, active: false },
-  { label: "Luxury Rail", icon: Train, active: false },
-]
-
-// Typewriter effect component
 function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
   const [displayedText, setDisplayedText] = useState("")
   const [isComplete, setIsComplete] = useState(false)
 
   useEffect(() => {
+    setDisplayedText("")
+    setIsComplete(false)
     const timeout = setTimeout(() => {
       let currentIndex = 0
       const interval = setInterval(() => {
@@ -47,8 +43,9 @@ function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
 }
 
 export function VerticalSelector({ scrollProgress, isReady = true }: VerticalSelectorProps) {
+  const { t } = useI18n()
   const [showContent, setShowContent] = useState(false)
-  
+
   const opacity = useTransform(scrollProgress, [0, 0.06], [1, 0])
   const y = useTransform(scrollProgress, [0, 0.06], [0, -40])
   const overlayOpacity = useTransform(scrollProgress, [0, 0.08], [0.7, 0.3])
@@ -61,46 +58,33 @@ export function VerticalSelector({ scrollProgress, isReady = true }: VerticalSel
     }
   }, [isReady])
 
+  const travelModes = [
+    { key: "riverCruise" as const, icon: Ship, active: true },
+    { key: "oceanCruise" as const, icon: Anchor, active: false },
+    { key: "luxuryRail" as const, icon: Train, active: false },
+  ]
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.12, delayChildren: 0.2 },
     },
   }
-
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
   }
-
   const buttonVariants = {
     hidden: { opacity: 0, y: 40, scale: 0.9 },
     visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 25,
-      },
+      opacity: 1, y: 0, scale: 1,
+      transition: { type: "spring", stiffness: 400, damping: 25 },
     },
   }
 
   return (
     <div className="w-[100vw] h-full shrink-0 relative flex items-center justify-center">
-      {/* Additional dark overlay for landing */}
       <motion.div
         style={{ opacity: overlayOpacity }}
         className="absolute inset-0 bg-background pointer-events-none z-10"
@@ -116,15 +100,14 @@ export function VerticalSelector({ scrollProgress, isReady = true }: VerticalSel
           animate={showContent ? "visible" : "hidden"}
           className="flex flex-col items-center gap-12"
         >
-          {/* Logo */}
           <div className="flex flex-col items-center gap-4">
             <motion.span
               variants={itemVariants}
               className="text-[10px] uppercase tracking-[0.4em] text-primary/80 font-sans"
             >
-              Introducing
+              {t.landing.introducing}
             </motion.span>
-            
+
             <motion.h1
               variants={itemVariants}
               className="font-serif text-5xl md:text-7xl font-semibold text-foreground text-center leading-tight"
@@ -146,30 +129,28 @@ export function VerticalSelector({ scrollProgress, isReady = true }: VerticalSel
                 Lens
               </motion.span>
             </motion.h1>
-            
+
             <motion.p
               variants={itemVariants}
               className="text-sm md:text-base text-muted-foreground text-center max-w-md leading-relaxed font-sans"
             >
               {showContent && (
                 <>
-                  <TypewriterText text="Discover the stories around you." delay={800} />
+                  <TypewriterText text={t.landing.tagline} delay={800} />
                   <br />
-                  <span className="text-foreground/60">
-                    Location-aware storytelling that reveals the meaning behind every landmark.
-                  </span>
+                  <span className="text-foreground/60">{t.landing.subtitle}</span>
                 </>
               )}
             </motion.p>
           </div>
 
-          {/* Mode selector */}
-          <motion.div variants={itemVariants} className="flex gap-4">
+          <motion.div variants={itemVariants} className="flex gap-4 flex-wrap justify-center">
             {travelModes.map((mode, index) => {
               const Icon = mode.icon
+              const label = t.landing.modes[mode.key]
               return (
                 <motion.button
-                  key={mode.label}
+                  key={mode.key}
                   variants={buttonVariants}
                   custom={index}
                   whileHover={mode.active ? { scale: 1.05, y: -4 } : {}}
@@ -187,11 +168,11 @@ export function VerticalSelector({ scrollProgress, isReady = true }: VerticalSel
                     }`}
                   />
                   <span
-                    className={`text-xs uppercase tracking-[0.15em] font-sans ${
+                    className={`text-xs uppercase tracking-[0.15em] font-sans text-center ${
                       mode.active ? "text-foreground" : "text-muted-foreground"
                     }`}
                   >
-                    {mode.label}
+                    {label}
                   </span>
                   {mode.active && (
                     <motion.div
@@ -199,25 +180,22 @@ export function VerticalSelector({ scrollProgress, isReady = true }: VerticalSel
                       className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-primary rounded-full"
                     />
                   )}
-                  {mode.active && (
-                    <div className="absolute inset-0 rounded-xl pulse-ring" />
-                  )}
+                  {mode.active && <div className="absolute inset-0 rounded-xl pulse-ring" />}
                 </motion.button>
               )
             })}
           </motion.div>
 
-          {/* Route subtitle */}
           <motion.p
             variants={itemVariants}
-            className="text-xs text-muted-foreground/60 uppercase tracking-[0.2em] font-sans"
+            className="text-xs text-muted-foreground/60 uppercase tracking-[0.2em] font-sans text-center"
           >
-            Rhine Valley Demo Route
+            {t.landing.demoRoute}
           </motion.p>
         </motion.div>
       </motion.div>
 
-      <ScrollHint opacity={hintOpacity} />
+      <ScrollHint opacity={hintOpacity} label={t.scrollHint} />
     </div>
   )
 }

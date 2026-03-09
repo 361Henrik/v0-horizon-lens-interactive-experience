@@ -3,25 +3,11 @@
 import * as React from "react"
 import { motion, type MotionValue, useTransform } from "framer-motion"
 import { Monitor, Cloud, Smartphone } from "lucide-react"
+import { useI18n } from "@/lib/i18n"
 
 interface PhaseTransitionProps {
   scrollProgress: MotionValue<number>
 }
-
-const terminalLines = [
-  { text: "> Compiling route data for Rhine Valley...", type: "command", delay: 0 },
-  { text: "  Corridor: Basel to Amsterdam (872 km)", type: "info", delay: 0.12 },
-  { text: "> Indexing 247 points of interest...", type: "command", delay: 0.24 },
-  { text: "  L0: Quick Facts generated", count: "247/247", type: "success", delay: 0.36 },
-  { text: "  L1: Narrative summaries generated", count: "247/247", type: "success", delay: 0.44 },
-  { text: "  L2: Deep-dive articles generated", count: "89/89", type: "success", delay: 0.52 },
-  { text: "  L3: Panoramic overlays generated", count: "34/34", type: "success", delay: 0.60 },
-  { text: "> Caching offline packages...", type: "command", delay: 0.68 },
-  { text: "> Generating QR access codes...", type: "command", delay: 0.76 },
-  { text: "> Packaging traveler experience...", type: "command", delay: 0.84 },
-  { text: "", type: "empty", delay: 0.92 },
-  { text: "STATUS: Ready for travelers", type: "status", delay: 0.96 },
-]
 
 function AnimatedCounter({ 
   target, 
@@ -102,7 +88,7 @@ function TerminalLine({
   )
 }
 
-function ConnectionDiagram({ progress }: { progress: number }) {
+function ConnectionDiagram({ progress, operatorLabel, travelerLabel }: { progress: number; operatorLabel: string; travelerLabel: string }) {
   const dotPosition = Math.min(100, progress * 100)
   
   return (
@@ -115,7 +101,7 @@ function ConnectionDiagram({ progress }: { progress: number }) {
         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${progress < 0.5 ? 'bg-primary/30 border border-primary/50' : 'bg-muted/30 border border-muted/30'}`}>
           <Monitor className={`w-5 h-5 ${progress < 0.5 ? 'text-primary' : 'text-muted-foreground'}`} />
         </div>
-        <span className="text-[8px] text-muted-foreground uppercase tracking-wider">Operator</span>
+        <span className="text-[8px] text-muted-foreground uppercase tracking-wider">{operatorLabel}</span>
       </motion.div>
 
       {/* Connection line */}
@@ -160,7 +146,7 @@ function ConnectionDiagram({ progress }: { progress: number }) {
         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${progress > 0.9 ? 'bg-emerald-500/30 border border-emerald-500/50' : 'bg-muted/30 border border-muted/30'}`}>
           <Smartphone className={`w-5 h-5 ${progress > 0.9 ? 'text-emerald-400' : 'text-muted-foreground'}`} />
         </div>
-        <span className="text-[8px] text-muted-foreground uppercase tracking-wider">Traveler</span>
+        <span className="text-[8px] text-muted-foreground uppercase tracking-wider">{travelerLabel}</span>
       </motion.div>
     </div>
   )
@@ -195,8 +181,24 @@ function MatrixRain() {
 }
 
 export function PhaseTransition({ scrollProgress }: PhaseTransitionProps) {
+  const { t } = useI18n()
   const phaseStart = 0.45
   const phaseEnd = 0.52
+
+  const terminalLines = [
+    { text: t.phaseTransition.terminal.cmd1, type: "command", delay: 0 },
+    { text: t.phaseTransition.terminal.info1, type: "info", delay: 0.12 },
+    { text: t.phaseTransition.terminal.cmd2, type: "command", delay: 0.24 },
+    { text: t.phaseTransition.terminal.l0, count: "247/247", type: "success", delay: 0.36 },
+    { text: t.phaseTransition.terminal.l1, count: "247/247", type: "success", delay: 0.44 },
+    { text: t.phaseTransition.terminal.l2, count: "89/89", type: "success", delay: 0.52 },
+    { text: t.phaseTransition.terminal.l3, count: "34/34", type: "success", delay: 0.60 },
+    { text: t.phaseTransition.terminal.cmd3, type: "command", delay: 0.68 },
+    { text: t.phaseTransition.terminal.cmd4, type: "command", delay: 0.76 },
+    { text: t.phaseTransition.terminal.cmd5, type: "command", delay: 0.84 },
+    { text: "", type: "empty", delay: 0.92 },
+    { text: t.phaseTransition.terminal.status, type: "status", delay: 0.96 },
+  ]
 
   const containerOpacity = useTransform(
     scrollProgress,
@@ -296,12 +298,16 @@ export function PhaseTransition({ scrollProgress }: PhaseTransitionProps) {
         </div>
 
         {/* Connection diagram */}
-        <ConnectionDiagram progress={currentProgress} />
+        <ConnectionDiagram
+          progress={currentProgress}
+          operatorLabel={t.phaseTransition.operator}
+          travelerLabel={t.phaseTransition.traveler}
+        />
 
         {/* Decorative label */}
         <div className="text-center mt-4">
           <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 font-sans">
-            Phase II — Content Handoff
+            {t.phaseTransition.label}
           </span>
         </div>
 

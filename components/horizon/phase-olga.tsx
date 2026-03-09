@@ -19,78 +19,51 @@ import {
   ReviewScreen,
   PublishScreen,
 } from "./screen-content"
+import { useI18n } from "@/lib/i18n"
 
 interface PhaseOlgaProps {
   scrollProgress: MotionValue<number>
 }
 
-const features = [
-  {
-    id: "route",
-    range: [0.08, 0.16] as [number, number],
-    title: "Geo-Bounded Corridor",
-    description:
-      "Define your exact route on a map. The AI scans only within your corridor, ensuring every story is relevant.",
-    voice:
-      "Draw the path your ship sails, and we'll find every story along the way.",
-    icon: Map,
-    ScreenComponent: RouteMapScreen,
-  },
-  {
-    id: "poi",
-    range: [0.16, 0.23] as [number, number],
-    title: "POI Discovery Engine",
-    description:
-      "Automated ingestion scans your corridor for castles, vineyards, villages, and landmarks.",
-    voice:
-      "The system discovers every point of interest your guests will wonder about.",
-    icon: MapPin,
-    ScreenComponent: POIListScreen,
-  },
-  {
-    id: "content",
-    range: [0.23, 0.30] as [number, number],
-    title: "Content Baking Engine",
-    description:
-      "Four tiers: Quick Facts, Narrative Summaries, Deep Dives, and Panoramic overlays. All pre-baked.",
-    voice:
-      "From quick facts to cinematic deep-dives, every tier is pre-baked and ready.",
-    icon: Layers,
-    ScreenComponent: ContentTiersScreen,
-  },
-  {
-    id: "tone",
-    range: [0.30, 0.36] as [number, number],
-    title: "Tone Calibration",
-    description:
-      "Slide between Formal Historian and Branded Luxury. Your brand voice infuses every word.",
-    voice: "Dial in your brand's voice — from scholarly to indulgent.",
-    icon: SlidersHorizontal,
-    ScreenComponent: ToneSliderScreen,
-  },
-  {
-    id: "review",
-    range: [0.36, 0.41] as [number, number],
-    title: "Human Review Gate",
-    description:
-      "Nothing goes live without your explicit approval. Flag, edit, or approve every piece of content.",
-    voice: "Nothing reaches your guests without your seal of approval.",
-    icon: ShieldCheck,
-    ScreenComponent: ReviewScreen,
-  },
-  {
-    id: "publish",
-    range: [0.41, 0.45] as [number, number],
-    title: "Publication Hub",
-    description:
-      "One-click publishing generates QR codes, web links, and offline packages instantly.",
-    voice: "One click. Every channel. Instantly live.",
-    icon: Rocket,
-    ScreenComponent: PublishScreen,
-  },
-]
+const FEATURE_RANGES: Record<string, [number, number]> = {
+  route:   [0.08, 0.16],
+  poi:     [0.16, 0.23],
+  content: [0.23, 0.30],
+  tone:    [0.30, 0.36],
+  review:  [0.36, 0.41],
+  publish: [0.41, 0.45],
+}
+
+const FEATURE_ICONS = {
+  route:   Map,
+  poi:     MapPin,
+  content: Layers,
+  tone:    SlidersHorizontal,
+  review:  ShieldCheck,
+  publish: Rocket,
+}
+
+const FEATURE_SCREENS = {
+  route:   RouteMapScreen,
+  poi:     POIListScreen,
+  content: ContentTiersScreen,
+  tone:    ToneSliderScreen,
+  review:  ReviewScreen,
+  publish: PublishScreen,
+}
 
 export function PhaseOlga({ scrollProgress }: PhaseOlgaProps) {
+  const { t } = useI18n()
+
+  const features = (Object.keys(FEATURE_RANGES) as Array<keyof typeof FEATURE_RANGES>).map((id) => ({
+    id,
+    range: FEATURE_RANGES[id],
+    title: t.phaseOlga.features[id as keyof typeof t.phaseOlga.features].title,
+    description: t.phaseOlga.features[id as keyof typeof t.phaseOlga.features].description,
+    voice: t.phaseOlga.features[id as keyof typeof t.phaseOlga.features].voice,
+    icon: FEATURE_ICONS[id as keyof typeof FEATURE_ICONS],
+    ScreenComponent: FEATURE_SCREENS[id as keyof typeof FEATURE_SCREENS],
+  }))
   const macOpacity = useTransform(
     scrollProgress,
     [0.06, 0.1, 0.43, 0.47],
@@ -130,11 +103,21 @@ export function PhaseOlga({ scrollProgress }: PhaseOlgaProps) {
   )
 }
 
+type FeatureItem = {
+  id: string
+  range: [number, number]
+  title: string
+  description: string
+  voice: string
+  icon: React.ComponentType<{ className?: string }>
+  ScreenComponent: React.ComponentType<{ progress: number }>
+}
+
 function ScreenPanel({
   feature,
   scrollProgress,
 }: {
-  feature: (typeof features)[0]
+  feature: FeatureItem
   scrollProgress: MotionValue<number>
 }) {
   const [start, end] = feature.range
@@ -195,7 +178,7 @@ function FeatureCallout({
   scrollProgress,
   index,
 }: {
-  feature: (typeof features)[0]
+  feature: FeatureItem
   scrollProgress: MotionValue<number>
   index: number
 }) {

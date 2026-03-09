@@ -1,0 +1,176 @@
+{
+  "lang": "es",
+  "langLabel": "Español",
+  "meta": {
+    "title": "Curated Lens | Descubre las historias a tu alrededor",
+    "description": "Una colina es solo una colina hasta que conoces su historia. Curated Lens es la plataforma de storytelling de viajes impulsada por IA que revela puntos de interés, historia y experiencias para viajeros premium."
+  },
+  "landing": {
+    "introducing": "Presentamos",
+    "tagline": "Descubre las historias a tu alrededor.",
+    "subtitle": "Narrativa basada en la ubicación que revela el significado detrás de cada hito.",
+    "demoRoute": "Ruta demo: Valle del Rin",
+    "modes": {
+      "riverCruise": "Crucero fluvial",
+      "oceanCruise": "Crucero marítimo",
+      "luxuryRail": "Tren de lujo"
+    }
+  },
+  "phaseOlga": {
+    "features": {
+      "route": {
+        "title": "Corredor geo-delimitado",
+        "description": "Define tu ruta exacta en un mapa. La IA analiza solo dentro de tu corredor, garantizando que cada historia sea relevante.",
+        "voice": "Traza el camino que navega tu barco y encontraremos cada historia en el trayecto."
+      },
+      "poi": {
+        "title": "Motor de descubrimiento de POI",
+        "description": "La ingesta automatizada analiza tu corredor en busca de castillos, viñedos, pueblos y puntos de referencia.",
+        "voice": "El sistema descubre cada punto de interés sobre el que tus huéspedes se preguntarán."
+      },
+      "content": {
+        "title": "Motor de creación de contenido",
+        "description": "Cuatro niveles: Datos rápidos, Resúmenes narrativos, Análisis en profundidad y Superposiciones panorámicas. Todo precreado.",
+        "voice": "De datos rápidos a inmersiones cinematográficas — cada nivel está listo de antemano."
+      },
+      "tone": {
+        "title": "Calibración de tono",
+        "description": "Desliza entre Historiador formal y Lujo de marca. La voz de tu marca impregna cada palabra.",
+        "voice": "Ajusta la voz de tu marca — de académica a indulgente."
+      },
+      "review": {
+        "title": "Puerta de revisión humana",
+        "description": "Nada se publica sin tu aprobación explícita. Marca, edita o aprueba cada pieza de contenido.",
+        "voice": "Nada llega a tus huéspedes sin tu sello de aprobación."
+      },
+      "publish": {
+        "title": "Centro de publicación",
+        "description": "La publicación con un clic genera al instante códigos QR, enlaces web y paquetes sin conexión.",
+        "voice": "Un clic. Todos los canales. Al instante en vivo."
+      }
+    }
+  },
+  "phaseTransition": {
+    "label": "Fase II — Transferencia de contenido",
+    "terminal": {
+      "cmd1": "> Compilando datos de ruta para el Valle del Rin...",
+      "info1": "  Corredor: Basilea a Ámsterdam (872 km)",
+      "cmd2": "> Indexando 247 puntos de interés...",
+      "l0": "  L0: Datos rápidos generados",
+      "l1": "  L1: Resúmenes narrativos generados",
+      "l2": "  L2: Artículos en profundidad generados",
+      "l3": "  L3: Superposiciones panorámicas generadas",
+      "cmd3": "> Almacenando paquetes sin conexión...",
+      "cmd4": "> Generando códigos QR de acceso...",
+      "cmd5": "> Empaquetando la experiencia del viajero...",
+      "status": "ESTADO: Listo para viajeros"
+    },
+    "operator": "Operador",
+    "traveler": "Viajero"
+  },
+  "phaseHelmut": {
+    "scenes": {
+      "discovery": {
+        "eyebrow": "Escena 1 de 5 — Descubrimiento",
+        "heading": "Un castillo aparece en el horizonte",
+        "body": "Cuando el Rin gira hacia el norte más allá de Braubach, una silueta medieval se eleva sobre la línea de los árboles. La mayoría de los huéspedes miran un momento y vuelven a sus bebidas. Curated Lens garantiza que nunca se pierdan la historia.",
+        "stat": { "value": "3,2s", "label": "Tiempo promedio hasta primer toque POI" }
+      },
+      "detection": {
+        "eyebrow": "Escena 2 de 5 — Detección de POI",
+        "heading": "La plataforma reconoce cada punto de referencia",
+        "body": "GPS cruzado con nuestra base de datos de 40.000 POI. El Castillo de Marksburg, la Roca de la Lorelei y 6 hitos más identificados y listos en 200 ms tras entrar en el área.",
+        "stat": { "value": "200ms", "label": "Latencia de detección" }
+      },
+      "story": {
+        "eyebrow": "Escena 3 de 5 — Historia contextual",
+        "heading": "Castillo de Marksburg — la historia se despliega",
+        "body": "Construido en 1117, Marksburg es la única fortaleza del Rin que nunca fue destruida en una guerra. Los huéspedes tocan la notificación y reciben una rica narrativa — historia, arquitectura, leyenda — en el momento exacto.",
+        "stat": { "value": "94 %", "label": "Tasa de engagement del contenido" }
+      },
+      "panoramic": {
+        "eyebrow": "Escena 4 de 5 — Exploración panorámica",
+        "heading": "El paisaje completo, anotado",
+        "body": "Gira el teléfono en horizontal y la vista se transforma en una capa panorámica anotada. Cada elemento del horizonte nombrado, cada historia accesible con un toque.",
+        "stat": { "value": "8,4×", "label": "Aumento del tiempo en contenido" }
+      },
+      "local": {
+        "eyebrow": "Escena 5 de 5 — Conexión local",
+        "heading": "Más allá del turismo — experiencias reales",
+        "body": "Curated Lens muestra recomendaciones locales seleccionadas: la bodega de Riesling a 400 m del muelle, el restaurante familiar que sirve especialidades regionales desde 1892.",
+        "stat": { "value": "68 %", "label": "Huéspedes que reservan experiencias locales" }
+      }
+    },
+    "poiCategories": {
+      "history": "Historia",
+      "nature": "Naturaleza",
+      "food": "Gastronomía",
+      "culture": "Cultura",
+      "experience": "Experiencia",
+      "local": "Local"
+    },
+    "phoneUi": {
+      "appName": "Curated Lens",
+      "nearby": "Cerca de ti",
+      "tapToExplore": "Toca para explorar",
+      "audioGuide": "Audioguía",
+      "listen": "Escuchar",
+      "readMore": "Leer más",
+      "landmark": "Monumento detectado",
+      "castleName": "Castillo de Marksburg",
+      "castleDesc": "La única fortaleza del Rin que nunca fue destruida en una guerra.",
+      "builtLabel": "Construido en",
+      "builtYear": "1117",
+      "styleLabel": "Estilo",
+      "styleName": "Románico renano",
+      "statusLabel": "Estado",
+      "statusName": "Listado por la UNESCO",
+      "panoramicMode": "Modo panorámico",
+      "rotateTip": "Gira para explorar",
+      "localTitle": "Experiencias locales",
+      "rieslingName": "Weingut Lahnstein",
+      "rieslingDist": "400 m del muelle",
+      "rieslingDesc": "Bodega de Riesling premiada, abierta para catas.",
+      "restaurantName": "Gasthaus Zum Anker",
+      "restaurantDist": "600 m del muelle",
+      "restaurantDesc": "Recetas familiares desde 1892, especialidades regionales.",
+      "bookTable": "Reservar mesa",
+      "bookTasting": "Reservar cata",
+      "discoverLabel": "Descubriendo tu entorno...",
+      "radarLabel": "Buscando puntos de interés",
+      "poisFound": "8 puntos de interés encontrados",
+      "poisFoundShort": "8 POI en rango"
+    }
+  },
+  "phaseConclusion": {
+    "insightsTitle": "Información de engagement",
+    "insightsSubtitle": "Ruta Valle del Rin — Últimos 30 días",
+    "journalTitle": "Diario de viaje digital",
+    "journalSubtitle": "Recuerdo de marca para cada huésped",
+    "journalRoute": "Valle del Rin",
+    "journalYourJourney": "Tu viaje",
+    "ctaEyebrow": "¿Listo para transformar la experiencia de tus huéspedes?",
+    "ctaHeading1": "Una colina es solo una colina",
+    "ctaHeading2": "hasta que conoces su historia",
+    "ctaBody": "Únete a Viking, Scenic y otros operadores premium que usan Curated Lens para transformar el turismo pasivo en narración de historias basada en ubicación en tiempo real.",
+    "ctaButton": "Programar una demo privada",
+    "trustBadge": "Con la confianza de más de 40 operadores premium en todo el mundo",
+    "stats": {
+      "interactions": "Interacciones totales",
+      "avgTime": "Tiempo promedio por POI",
+      "audioListens": "Reproducciones de audio"
+    },
+    "chartLabels": {
+      "marksburg": "Castillo de Marksburg",
+      "lorelei": "Roca de la Lorelei",
+      "bacharach": "Pueblo de Bacharach",
+      "drachenfels": "Ruinas de Drachenfels"
+    },
+    "voiceInsights": "Descubre lo que realmente les importó a tus huéspedes y úsalo para mejorar cada futuro viaje."
+  },
+  "scrollHint": "Desplázate para explorar",
+  "languageSwitcher": {
+    "label": "Idioma",
+    "choose": "Elegir idioma"
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "lang": "de",
+  "langLabel": "Deutsch",
+  "meta": {
+    "title": "Curated Lens | Entdecke die Geschichten um dich herum",
+    "description": "Ein Hügel ist nur ein Hügel – bis du seine Geschichte kennst. Curated Lens ist die KI-gestützte Plattform für Reisestorytelling, die Sehenswürdigkeiten, Geschichte und Erlebnisse für Premium-Reisende aufdeckt."
+  },
+  "landing": {
+    "introducing": "Wir stellen vor",
+    "tagline": "Entdecke die Geschichten um dich herum.",
+    "subtitle": "Standortbasiertes Storytelling, das die Bedeutung hinter jedem Wahrzeichen enthüllt.",
+    "demoRoute": "Demo-Route: Rheintal",
+    "modes": {
+      "riverCruise": "Flusskreuzfahrt",
+      "oceanCruise": "Hochseekreuzfahrt",
+      "luxuryRail": "Luxuszug"
+    }
+  },
+  "phaseOlga": {
+    "features": {
+      "route": {
+        "title": "Geo-begrenzter Korridor",
+        "description": "Definiere deine genaue Route auf einer Karte. Die KI scannt nur innerhalb deines Korridors und stellt sicher, dass jede Geschichte relevant ist.",
+        "voice": "Zeichne den Weg deines Schiffes, und wir finden jede Geschichte entlang der Strecke."
+      },
+      "poi": {
+        "title": "POI-Entdeckungsmotor",
+        "description": "Automatisierte Erfassung scannt deinen Korridor nach Schlössern, Weinbergen, Dörfern und Wahrzeichen.",
+        "voice": "Das System entdeckt jeden Punkt, über den sich deine Gäste Gedanken machen werden."
+      },
+      "content": {
+        "title": "Inhaltserzeugungsmotor",
+        "description": "Vier Ebenen: Schnellfakten, Erzählende Zusammenfassungen, Tiefgang-Artikel und Panorama-Overlays. Alle vorproduziert.",
+        "voice": "Von Schnellfakten bis zu filmischen Tiefgang-Beiträgen – jede Ebene ist vorbereitet und bereit."
+      },
+      "tone": {
+        "title": "Ton-Kalibrierung",
+        "description": "Wähle zwischen Formalem Historiker und Luxus-Marke. Deine Markenstimme prägt jedes Wort.",
+        "voice": "Stelle die Stimme deiner Marke ein – von wissenschaftlich bis luxuriös."
+      },
+      "review": {
+        "title": "Menschliches Freigabe-Gate",
+        "description": "Nichts wird live geschaltet ohne deine ausdrückliche Genehmigung. Markieren, bearbeiten oder genehmigen — alles liegt in deiner Hand.",
+        "voice": "Kein Inhalt erreicht deine Gäste ohne deinen Stempel."
+      },
+      "publish": {
+        "title": "Publikationszentrum",
+        "description": "Ein-Klick-Veröffentlichung erzeugt sofort QR-Codes, Weblinks und Offline-Pakete.",
+        "voice": "Ein Klick. Alle Kanäle. Sofort live."
+      }
+    }
+  },
+  "phaseTransition": {
+    "label": "Phase II — Inhaltsübergabe",
+    "terminal": {
+      "cmd1": "> Routendaten für das Rheintal werden kompiliert...",
+      "info1": "  Korridor: Basel bis Amsterdam (872 km)",
+      "cmd2": "> 247 Sehenswürdigkeiten werden indiziert...",
+      "l0": "  L0: Schnellfakten generiert",
+      "l1": "  L1: Erzählende Zusammenfassungen generiert",
+      "l2": "  L2: Tiefgang-Artikel generiert",
+      "l3": "  L3: Panorama-Overlays generiert",
+      "cmd3": "> Offline-Pakete werden gecacht...",
+      "cmd4": "> QR-Zugangscodes werden generiert...",
+      "cmd5": "> Reiseerlebnis wird verpackt...",
+      "status": "STATUS: Bereit für Reisende"
+    },
+    "operator": "Betreiber",
+    "traveler": "Reisende"
+  },
+  "phaseHelmut": {
+    "scenes": {
+      "discovery": {
+        "eyebrow": "Szene 1 von 5 — Entdeckung",
+        "heading": "Ein Schloss erscheint am Horizont",
+        "body": "Wenn der Rhein nördlich von Braubach eine Kurve macht, erhebt sich eine mittelalterliche Silhouette über die Baumkronen. Die meisten Gäste blicken kurz auf und wenden sich dann wieder ihren Drinks zu. Curated Lens stellt sicher, dass ihnen die Geschichte nicht entgeht.",
+        "stat": { "value": "3,2s", "label": "Durchschn. Zeit bis zum ersten POI-Tippen" }
+      },
+      "detection": {
+        "eyebrow": "Szene 2 von 5 — POI-Erkennung",
+        "heading": "Die Plattform erkennt jedes Wahrzeichen",
+        "body": "GPS wird mit unserer 40.000-Einträge-POI-Datenbank abgeglichen. Marksburg, Loreleyfelsen und 6 weitere Wahrzeichen sind innerhalb von 200 ms nach dem Eintreten in den Bereich gekennzeichnet und bereit.",
+        "stat": { "value": "200ms", "label": "Erkennungslatenz" }
+      },
+      "story": {
+        "eyebrow": "Szene 3 von 5 — Kontextuelle Geschichte",
+        "heading": "Marksburg — die Geschichte entfaltet sich",
+        "body": "Erbaut im Jahr 1117 ist die Marksburg die einzige Rheinburg, die im Krieg nie zerstört wurde. Gäste tippen auf die Benachrichtigung und erhalten eine reichhaltige Erzählung — Geschichte, Architektur, Legende — genau im richtigen Moment.",
+        "stat": { "value": "94 %", "label": "Content-Engagement-Rate" }
+      },
+      "panoramic": {
+        "eyebrow": "Szene 4 von 5 — Panorama-Erkundung",
+        "heading": "Die gesamte Landschaft — annotiert",
+        "body": "Drehe das Telefon ins Querformat und die Ansicht verwandelt sich in eine annotierte Panoramaebene. Jedes Merkmal am Horizont benannt, jede Geschichte mit einem Tippen zugänglich.",
+        "stat": { "value": "8,4×", "label": "Anstieg der Verweildauer bei Inhalten" }
+      },
+      "local": {
+        "eyebrow": "Szene 5 von 5 — Lokale Verbindung",
+        "heading": "Jenseits von Sightseeing — echte Erlebnisse",
+        "body": "Curated Lens zeigt kuratierte lokale Empfehlungen: das Riesling-Weingut 400 m vom Anleger, das familiengeführte Restaurant, das seit 1892 regionale Spezialitäten serviert.",
+        "stat": { "value": "68 %", "label": "Gäste, die lokale Erlebnisse buchen" }
+      }
+    },
+    "poiCategories": {
+      "history": "Geschichte",
+      "nature": "Natur",
+      "food": "Essen & Trinken",
+      "culture": "Kultur",
+      "experience": "Erlebnis",
+      "local": "Lokal"
+    },
+    "phoneUi": {
+      "appName": "Curated Lens",
+      "nearby": "In der Nähe",
+      "tapToExplore": "Tippen zum Erkunden",
+      "audioGuide": "Audioguide",
+      "listen": "Anhören",
+      "readMore": "Mehr lesen",
+      "landmark": "Wahrzeichen erkannt",
+      "castleName": "Marksburg",
+      "castleDesc": "Die einzige Rheinburg, die nie im Krieg zerstört wurde.",
+      "builtLabel": "Erbaut",
+      "builtYear": "1117",
+      "styleLabel": "Stil",
+      "styleName": "Rheinische Romanik",
+      "statusLabel": "Status",
+      "statusName": "UNESCO-gelistet",
+      "panoramicMode": "Panoramamodus",
+      "rotateTip": "Drehen zum Erkunden",
+      "localTitle": "Lokale Erlebnisse",
+      "rieslingName": "Weingut Lahnstein",
+      "rieslingDist": "400 m vom Anleger",
+      "rieslingDesc": "Preisgekröntes Riesling-Weingut, offen für Verkostungen.",
+      "restaurantName": "Gasthaus Zum Anker",
+      "restaurantDist": "600 m vom Anleger",
+      "restaurantDesc": "Familienrezepte seit 1892, regionale Spezialitäten.",
+      "bookTable": "Tisch reservieren",
+      "bookTasting": "Verkostung buchen",
+      "discoverLabel": "Umgebung wird erkundet...",
+      "radarLabel": "Suche nach Sehenswürdigkeiten",
+      "poisFound": "8 Sehenswürdigkeiten gefunden",
+      "poisFoundShort": "8 POIs in Reichweite"
+    }
+  },
+  "phaseConclusion": {
+    "insightsTitle": "Engagement-Einblicke",
+    "insightsSubtitle": "Rheintal-Route — Letzte 30 Tage",
+    "journalTitle": "Digitales Reisetagebuch",
+    "journalSubtitle": "Marken-Souvenir für jeden Gast",
+    "journalRoute": "Rheintal",
+    "journalYourJourney": "Deine Reise",
+    "ctaEyebrow": "Bereit, das Gästeerlebnis zu transformieren?",
+    "ctaHeading1": "Ein Hügel ist nur ein Hügel",
+    "ctaHeading2": "– bis du seine Geschichte kennst",
+    "ctaBody": "Schließe dich Viking, Scenic und anderen Premium-Betreibern an, die Curated Lens nutzen, um passives Sightseeing in standortbasiertes Echtzeit-Storytelling zu verwandeln.",
+    "ctaButton": "Private Demo vereinbaren",
+    "trustBadge": "Vertrauen von 40+ Premium-Betreibern weltweit",
+    "stats": {
+      "interactions": "Interaktionen gesamt",
+      "avgTime": "Durchschn. Zeit pro POI",
+      "audioListens": "Audiowiedergaben"
+    },
+    "chartLabels": {
+      "marksburg": "Marksburg",
+      "lorelei": "Loreleyfelsen",
+      "bacharach": "Bacharach",
+      "drachenfels": "Drachenfels-Ruinen"
+    },
+    "voiceInsights": "Erfahre, was deine Gäste wirklich interessiert hat, und nutze es zur Verbesserung jeder zukünftigen Reise."
+  },
+  "scrollHint": "Scrollen zum Erkunden",
+  "languageSwitcher": {
+    "label": "Sprache",
+    "choose": "Sprache wählen"
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "lang": "en",
+  "langLabel": "English",
+  "meta": {
+    "title": "Curated Lens | Discover the Stories Around You",
+    "description": "A hill is just a hill until you know its story. Curated Lens is the AI-powered location storytelling platform that reveals points of interest, history, and experiences for premium travelers."
+  },
+  "landing": {
+    "introducing": "Introducing",
+    "tagline": "Discover the stories around you.",
+    "subtitle": "Location-aware storytelling that reveals the meaning behind every landmark.",
+    "demoRoute": "Rhine Valley Demo Route",
+    "modes": {
+      "riverCruise": "River Cruise",
+      "oceanCruise": "Ocean Cruise",
+      "luxuryRail": "Luxury Rail"
+    }
+  },
+  "phaseOlga": {
+    "features": {
+      "route": {
+        "title": "Geo-Bounded Corridor",
+        "description": "Define your exact route on a map. The AI scans only within your corridor, ensuring every story is relevant.",
+        "voice": "Draw the path your ship sails, and we'll find every story along the way."
+      },
+      "poi": {
+        "title": "POI Discovery Engine",
+        "description": "Automated ingestion scans your corridor for castles, vineyards, villages, and landmarks.",
+        "voice": "The system discovers every point of interest your guests will wonder about."
+      },
+      "content": {
+        "title": "Content Baking Engine",
+        "description": "Four tiers: Quick Facts, Narrative Summaries, Deep Dives, and Panoramic overlays. All pre-baked.",
+        "voice": "From quick facts to cinematic deep-dives, every tier is pre-baked and ready."
+      },
+      "tone": {
+        "title": "Tone Calibration",
+        "description": "Slide between Formal Historian and Branded Luxury. Your brand voice infuses every word.",
+        "voice": "Dial in your brand's voice — from scholarly to indulgent."
+      },
+      "review": {
+        "title": "Human Review Gate",
+        "description": "Nothing goes live without your explicit approval. Flag, edit, or approve every piece of content.",
+        "voice": "Nothing reaches your guests without your seal of approval."
+      },
+      "publish": {
+        "title": "Publication Hub",
+        "description": "One-click publishing generates QR codes, web links, and offline packages instantly.",
+        "voice": "One click. Every channel. Instantly live."
+      }
+    }
+  },
+  "phaseTransition": {
+    "label": "Phase II — Content Handoff",
+    "terminal": {
+      "cmd1": "> Compiling route data for Rhine Valley...",
+      "info1": "  Corridor: Basel to Amsterdam (872 km)",
+      "cmd2": "> Indexing 247 points of interest...",
+      "l0": "  L0: Quick Facts generated",
+      "l1": "  L1: Narrative summaries generated",
+      "l2": "  L2: Deep-dive articles generated",
+      "l3": "  L3: Panoramic overlays generated",
+      "cmd3": "> Caching offline packages...",
+      "cmd4": "> Generating QR access codes...",
+      "cmd5": "> Packaging traveler experience...",
+      "status": "STATUS: Ready for travelers"
+    },
+    "operator": "Operator",
+    "traveler": "Traveler"
+  },
+  "phaseHelmut": {
+    "scenes": {
+      "discovery": {
+        "eyebrow": "Scene 1 of 5 — Discovery",
+        "heading": "A Castle Appears on the Horizon",
+        "body": "As the Rhine curves north past Braubach, a medieval silhouette rises above the tree line. Most guests glance up, then return to their drinks. Curated Lens ensures they never miss the story.",
+        "stat": { "value": "3.2s", "label": "Avg. time to first POI tap" }
+      },
+      "detection": {
+        "eyebrow": "Scene 2 of 5 — POI Detection",
+        "heading": "The Platform Recognises Every Landmark",
+        "body": "GPS cross-referenced against our 40,000-entry POI database. Marksburg Castle, Loreley Rock, and 6 other landmarks pinned and ready within 200ms of entering range.",
+        "stat": { "value": "200ms", "label": "Detection latency" }
+      },
+      "story": {
+        "eyebrow": "Scene 3 of 5 — Contextual Story",
+        "heading": "Marksburg Castle — The Story Unfolds",
+        "body": "Built in 1117, Marksburg is the only Rhine fortress never destroyed in warfare. Guests tap the notification and receive a rich narrative — history, architecture, legend — at exactly the right moment.",
+        "stat": { "value": "94%", "label": "Content engagement rate" }
+      },
+      "panoramic": {
+        "eyebrow": "Scene 4 of 5 — Panoramic Exploration",
+        "heading": "The Full Landscape, Annotated",
+        "body": "Rotate the phone to landscape and the view transforms into an annotated panoramic layer. Every feature of the horizon named, every story accessible with a tap.",
+        "stat": { "value": "8.4x", "label": "Increase in time on content" }
+      },
+      "local": {
+        "eyebrow": "Scene 5 of 5 — Local Connection",
+        "heading": "Beyond Sightseeing — Real Experiences",
+        "body": "Curated Lens surfaces curated local recommendations: the Riesling estate 400m from the dock, the family-run restaurant serving regional specialties since 1892.",
+        "stat": { "value": "68%", "label": "Guests who book local experiences" }
+      }
+    },
+    "poiCategories": {
+      "history": "History",
+      "nature": "Nature",
+      "food": "Food & Drink",
+      "culture": "Culture",
+      "experience": "Experience",
+      "local": "Local"
+    },
+    "phoneUi": {
+      "appName": "Curated Lens",
+      "nearby": "Nearby",
+      "tapToExplore": "Tap to explore",
+      "audioGuide": "Audio Guide",
+      "listen": "Listen",
+      "readMore": "Read more",
+      "landmark": "Landmark detected",
+      "castleName": "Marksburg Castle",
+      "castleDesc": "The only Rhine fortress never destroyed in warfare.",
+      "builtLabel": "Built",
+      "builtYear": "1117",
+      "styleLabel": "Style",
+      "styleName": "Rhenish Romanesque",
+      "statusLabel": "Status",
+      "statusName": "UNESCO Listed",
+      "panoramicMode": "Panoramic Mode",
+      "rotateTip": "Rotate to explore",
+      "localTitle": "Local Experiences",
+      "rieslingName": "Weingut Lahnstein",
+      "rieslingDist": "400m from dock",
+      "rieslingDesc": "Award-winning Riesling estate, open for tastings.",
+      "restaurantName": "Gasthaus Zum Anker",
+      "restaurantDist": "600m from dock",
+      "restaurantDesc": "Family recipes since 1892, regional specialties.",
+      "bookTable": "Book a Table",
+      "bookTasting": "Book Tasting",
+      "discoverLabel": "Discovering your surroundings...",
+      "radarLabel": "Scanning for points of interest",
+      "poisFound": "8 points of interest found",
+      "poisFoundShort": "8 POIs in range"
+    }
+  },
+  "phaseConclusion": {
+    "insightsTitle": "Engagement Insights",
+    "insightsSubtitle": "Rhine Valley Route — Last 30 Days",
+    "journalTitle": "Digital Travel Journal",
+    "journalSubtitle": "Branded keepsake for every guest",
+    "journalRoute": "Rhine Valley",
+    "journalYourJourney": "Your Journey",
+    "ctaEyebrow": "Ready to Transform Your Guest Experience?",
+    "ctaHeading1": "A Hill Is Just a Hill",
+    "ctaHeading2": "Until You Know Its Story",
+    "ctaBody": "Join Viking, Scenic, and other premium operators who use Curated Lens to transform passive sightseeing into real-time location storytelling.",
+    "ctaButton": "Schedule a Private Demo",
+    "trustBadge": "Trusted by 40+ premium operators worldwide",
+    "stats": {
+      "interactions": "Total Interactions",
+      "avgTime": "Avg. Time per POI",
+      "audioListens": "Audio Listens"
+    },
+    "chartLabels": {
+      "marksburg": "Marksburg Castle",
+      "lorelei": "Lorelei Rock",
+      "bacharach": "Bacharach Village",
+      "drachenfels": "Drachenfels Ruins"
+    },
+    "voiceInsights": "See what your guests truly cared about, and use it to improve every future voyage."
+  },
+  "scrollHint": "Scroll to explore",
+  "languageSwitcher": {
+    "label": "Language",
+    "choose": "Choose language"
+  }
+}

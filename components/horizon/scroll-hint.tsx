@@ -5,16 +5,17 @@ import { ChevronDown } from "lucide-react"
 
 interface ScrollHintProps {
   opacity: MotionValue<number>
+  label?: string
 }
 
-export function ScrollHint({ opacity }: ScrollHintProps) {
+export function ScrollHint({ opacity, label = "Scroll to explore" }: ScrollHintProps) {
   return (
     <motion.div
       style={{ opacity }}
       className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20"
     >
       <span className="text-xs uppercase tracking-[0.3em] text-foreground/40 font-sans">
-        Scroll to begin your journey
+        {label}
       </span>
       <motion.div
         animate={{ y: [0, 6, 0] }}

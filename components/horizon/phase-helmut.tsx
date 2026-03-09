@@ -3,6 +3,7 @@
 import * as React from "react"
 import { type MotionValue, useTransform, motion, AnimatePresence } from "framer-motion"
 import { IPhoneFrame } from "./device-frame"
+import { useI18n } from "@/lib/i18n"
 
 // ---------------------------------------------------------------------------
 // Shared image source — the single hero asset used as the environment scene.
@@ -490,70 +491,85 @@ function Scene5Screen({ progress }: { progress: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// Scenes definition
+// Scenes definition — built from locale strings
 // ---------------------------------------------------------------------------
-const scenes = [
-  {
-    id: "discovery",
-    range: [0.53, 0.62] as [number, number],
-    title: "Discovery",
-    subtitle: "What is that castle on the hill?",
-    narrative:
-      "Your traveler sees the Rhine landscape and wonders what that glowing fortress on the hilltop might be. They raise their phone.",
-    activeCategory: "history",
-    Screen: Scene1Screen,
-    isLandscape: false,
-  },
-  {
-    id: "detection",
-    range: [0.62, 0.70] as [number, number],
-    title: "POI Detection",
-    subtitle: "The system identifies landmarks",
-    narrative:
-      "Curated Lens overlays AR markers directly onto the live camera view, pinning every point of interest in real time.",
-    activeCategory: "nature",
-    Screen: Scene2Screen,
-    isLandscape: false,
-  },
-  {
-    id: "context",
-    range: [0.70, 0.77] as [number, number],
-    title: "Contextual Story",
-    subtitle: "Stories, facts and history appear",
-    narrative:
-      "Rich verified content surfaces instantly — audio narration, quick facts, and deep dives anchored to the exact landmark in frame.",
-    activeCategory: "culture",
-    Screen: Scene3Screen,
-    isLandscape: false,
-  },
-  {
-    id: "exploration",
-    range: [0.77, 0.83] as [number, number],
-    title: "Panoramic Exploration",
-    subtitle: "Landscape mode — full story",
-    narrative:
-      "Rotate to landscape for a cinematic deep-dive. The image stays level and correctly oriented as annotation pins appear over the scene.",
-    activeCategory: "weather",
-    Screen: Scene4Screen,
-    isLandscape: true,
-  },
-  {
-    id: "connection",
-    range: [0.83, 0.88] as [number, number],
-    title: "Local Connection",
-    subtitle: "Experiences, tours, food nearby",
-    narrative:
-      "Beyond stories — curated local experiences, tours, and products surface from trusted operators connected to your route.",
-    activeCategory: "experience",
-    Screen: Scene5Screen,
-    isLandscape: false,
-  },
-]
+type SceneDef = {
+  id: string
+  range: [number, number]
+  eyebrow: string
+  heading: string
+  body: string
+  stat: { value: string; label: string }
+  activeCategory: string
+  Screen: React.ComponentType<{ progress: number }>
+  isLandscape: boolean
+}
+
+function buildScenes(t: ReturnType<typeof useI18n>["t"]): SceneDef[] {
+  const s = t.phaseHelmut.scenes
+  return [
+    {
+      id: "discovery",
+      range: [0.53, 0.62],
+      eyebrow: s.discovery.eyebrow,
+      heading: s.discovery.heading,
+      body: s.discovery.body,
+      stat: s.discovery.stat,
+      activeCategory: "history",
+      Screen: Scene1Screen,
+      isLandscape: false,
+    },
+    {
+      id: "detection",
+      range: [0.62, 0.70],
+      eyebrow: s.detection.eyebrow,
+      heading: s.detection.heading,
+      body: s.detection.body,
+      stat: s.detection.stat,
+      activeCategory: "nature",
+      Screen: Scene2Screen,
+      isLandscape: false,
+    },
+    {
+      id: "story",
+      range: [0.70, 0.77],
+      eyebrow: s.story.eyebrow,
+      heading: s.story.heading,
+      body: s.story.body,
+      stat: s.story.stat,
+      activeCategory: "culture",
+      Screen: Scene3Screen,
+      isLandscape: false,
+    },
+    {
+      id: "panoramic",
+      range: [0.77, 0.83],
+      eyebrow: s.panoramic.eyebrow,
+      heading: s.panoramic.heading,
+      body: s.panoramic.body,
+      stat: s.panoramic.stat,
+      activeCategory: "weather",
+      Screen: Scene4Screen,
+      isLandscape: true,
+    },
+    {
+      id: "local",
+      range: [0.83, 0.88],
+      eyebrow: s.local.eyebrow,
+      heading: s.local.heading,
+      body: s.local.body,
+      stat: s.local.stat,
+      activeCategory: "experience",
+      Screen: Scene5Screen,
+      isLandscape: false,
+    },
+  ]
+}
 
 // ---------------------------------------------------------------------------
 // PhoneScreenContent — single phone slot, swaps scene content
 // ---------------------------------------------------------------------------
-function PhoneScreenContent({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+function PhoneScreenContent({ scrollProgress, scenes }: { scrollProgress: MotionValue<number>; scenes: SceneDef[] }) {
   const [activeScene, setActiveScene] = React.useState(0)
   const [sceneProgress, setSceneProgress] = React.useState(0)
 
@@ -594,7 +610,7 @@ function PhoneScreenContent({ scrollProgress }: { scrollProgress: MotionValue<nu
 // ---------------------------------------------------------------------------
 // Narrative + Context panels
 // ---------------------------------------------------------------------------
-function SceneNarrativePanel({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+function SceneNarrativePanel({ scrollProgress, scenes, poiCategories }: { scrollProgress: MotionValue<number>; scenes: SceneDef[]; poiCategories: Record<string, string> }) {
   const [activeScene, setActiveScene] = React.useState(0)
   React.useEffect(() => {
     return scrollProgress.on("change", (v) => {
@@ -602,7 +618,7 @@ function SceneNarrativePanel({ scrollProgress }: { scrollProgress: MotionValue<n
         if (v >= scenes[i].range[0]) { setActiveScene(i); return }
       }
     })
-  }, [scrollProgress])
+  }, [scrollProgress, scenes])
 
   const scene = scenes[activeScene]
 
@@ -618,31 +634,34 @@ function SceneNarrativePanel({ scrollProgress }: { scrollProgress: MotionValue<n
       >
         <div className="flex items-center gap-2">
           <span className="text-[10px] uppercase tracking-[0.3em] text-primary/60 font-sans">
-            Scene {String(activeScene + 1).padStart(2, "0")}
+            {scene.eyebrow}
           </span>
           <div className="flex-1 h-px bg-primary/20" />
         </div>
 
         <div>
-          <h2 className="font-serif text-3xl font-semibold text-foreground leading-tight mb-2">
-            {scene.title}
+          <h2 className="font-serif text-3xl font-semibold text-foreground leading-tight mb-2 text-balance">
+            {scene.heading}
           </h2>
-          <p className="text-sm text-primary/80 font-sans italic mb-3">
-            &ldquo;{scene.subtitle}&rdquo;
-          </p>
           <p className="text-sm text-muted-foreground leading-relaxed font-sans">
-            {scene.narrative}
+            {scene.body}
           </p>
+          {scene.stat && (
+            <div className="mt-3 flex items-center gap-2">
+              <span className="font-serif text-xl text-primary">{scene.stat.value}</span>
+              <span className="text-[10px] text-muted-foreground font-sans uppercase tracking-wider">{scene.stat.label}</span>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-2">
           {[
-            { type: "history",    label: "History"     },
-            { type: "nature",     label: "Nature"      },
-            { type: "food",       label: "Food"        },
-            { type: "culture",    label: "Culture"     },
-            { type: "experience", label: "Experiences" },
-            { type: "local",      label: "Local"       },
+            { type: "history",    label: poiCategories.history    },
+            { type: "nature",     label: poiCategories.nature     },
+            { type: "food",       label: poiCategories.food       },
+            { type: "culture",    label: poiCategories.culture    },
+            { type: "experience", label: poiCategories.experience },
+            { type: "local",      label: poiCategories.local      },
           ].map((cat, i) => (
             <PoiCategoryPill
               key={cat.type}
@@ -670,7 +689,7 @@ function SceneNarrativePanel({ scrollProgress }: { scrollProgress: MotionValue<n
   )
 }
 
-function SceneContextPanel({ scrollProgress }: { scrollProgress: MotionValue<number> }) {
+function SceneContextPanel({ scrollProgress, scenes }: { scrollProgress: MotionValue<number>; scenes: SceneDef[] }) {
   const [activeScene, setActiveScene] = React.useState(0)
   React.useEffect(() => {
     return scrollProgress.on("change", (v) => {
@@ -678,7 +697,7 @@ function SceneContextPanel({ scrollProgress }: { scrollProgress: MotionValue<num
         if (v >= scenes[i].range[0]) { setActiveScene(i); return }
       }
     })
-  }, [scrollProgress])
+  }, [scrollProgress, scenes])
 
   const contextContent = [
     { stat: "247",  label: "POIs detected",    sub: "along Rhine corridor"   },
@@ -736,6 +755,8 @@ interface PhaseHelmutProps {
 }
 
 export function PhaseHelmut({ scrollProgress }: PhaseHelmutProps) {
+  const { t } = useI18n()
+  const scenes = React.useMemo(() => buildScenes(t), [t])
   const phaseStart = scenes[0].range[0]
   const phaseEnd   = scenes[scenes.length - 1].range[1]
 
@@ -807,7 +828,7 @@ export function PhaseHelmut({ scrollProgress }: PhaseHelmutProps) {
           >
             <IPhoneFrame>
               <div className="relative w-full h-full overflow-hidden rounded-[2rem]">
-                <PhoneScreenContent scrollProgress={scrollProgress} />
+                <PhoneScreenContent scrollProgress={scrollProgress} scenes={scenes} />
               </div>
             </IPhoneFrame>
           </motion.div>

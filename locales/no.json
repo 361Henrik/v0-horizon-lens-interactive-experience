@@ -1,0 +1,176 @@
+{
+  "lang": "no",
+  "langLabel": "Norsk",
+  "meta": {
+    "title": "Curated Lens | Oppdag historiene rundt deg",
+    "description": "En bakke er bare en bakke – inntil du kjenner historien. Curated Lens er den AI-drevne plattformen for reisestorytelling som avdekker severdigheter, historie og opplevelser for premiumreisende."
+  },
+  "landing": {
+    "introducing": "Vi presenterer",
+    "tagline": "Oppdag historiene rundt deg.",
+    "subtitle": "Stedsorientert historiefortelling som avslører betydningen bak hvert landemerke.",
+    "demoRoute": "Demorute: Rhindalen",
+    "modes": {
+      "riverCruise": "Elvecruise",
+      "oceanCruise": "Havkryssing",
+      "luxuryRail": "Luksuståg"
+    }
+  },
+  "phaseOlga": {
+    "features": {
+      "route": {
+        "title": "Geo-avgrenset korridor",
+        "description": "Definer din nøyaktige rute på kartet. AI-en skanner kun innenfor korridoren, slik at hver historie er relevant.",
+        "voice": "Tegn stien skipet ditt seiler, og vi finner hver eneste historie underveis."
+      },
+      "poi": {
+        "title": "Motor for POI-oppdagelse",
+        "description": "Automatisk innhenting skanner korridoren din etter slott, vingårder, landsbyer og landemerker.",
+        "voice": "Systemet oppdager hvert interessepunkt gjestene dine vil lure på."
+      },
+      "content": {
+        "title": "Innholdsmotor",
+        "description": "Fire nivåer: Hurtigfakta, Narrativt sammendrag, Dypdykk og Panoramaoverlegg. Alle forhåndslagret.",
+        "voice": "Fra hurtigfakta til filmiske dypdykk – hvert nivå er klart og forhåndslagret."
+      },
+      "tone": {
+        "title": "Toneinnstilling",
+        "description": "Velg mellom Formell Historiker og Luksusmerke. Merkevarens stemme preger hvert ord.",
+        "voice": "Stille inn merkevarens stemme – fra akademisk til luksuriøs."
+      },
+      "review": {
+        "title": "Menneskelig godkjenningsport",
+        "description": "Ingenting publiseres uten din eksplisitte godkjenning. Flagg, rediger eller godkjenn alt innhold.",
+        "voice": "Ingenting når gjestene dine uten ditt stempel."
+      },
+      "publish": {
+        "title": "Publiseringssenter",
+        "description": "Énklikks-publisering genererer QR-koder, lenker og offline-pakker øyeblikkelig.",
+        "voice": "Ett klikk. Alle kanaler. Umiddelbart live."
+      }
+    }
+  },
+  "phaseTransition": {
+    "label": "Fase II — Innholdsoverføring",
+    "terminal": {
+      "cmd1": "> Kompilerer rutedata for Rhindalen...",
+      "info1": "  Korridor: Basel til Amsterdam (872 km)",
+      "cmd2": "> Indekserer 247 interessepunkter...",
+      "l0": "  L0: Hurtigfakta generert",
+      "l1": "  L1: Narrative sammendrag generert",
+      "l2": "  L2: Dypdykk-artikler generert",
+      "l3": "  L3: Panoramaoverlegg generert",
+      "cmd3": "> Bufrer offline-pakker...",
+      "cmd4": "> Genererer QR-tilgangskoder...",
+      "cmd5": "> Pakker reiseopplevelsen...",
+      "status": "STATUS: Klar for reisende"
+    },
+    "operator": "Operatør",
+    "traveler": "Reisende"
+  },
+  "phaseHelmut": {
+    "scenes": {
+      "discovery": {
+        "eyebrow": "Scene 1 av 5 — Oppdagelse",
+        "heading": "Et slott dukker opp i horisonten",
+        "body": "Når Rhinen svinger nordover forbi Braubach, reiser en middelaldersk silhuett seg over trærne. De fleste gjester ser raskt opp, så vender de tilbake til drinkene sine. Curated Lens sørger for at de aldri går glipp av historien.",
+        "stat": { "value": "3,2s", "label": "Gj.snitt tid til første POI-trykk" }
+      },
+      "detection": {
+        "eyebrow": "Scene 2 av 5 — POI-gjenkjenning",
+        "heading": "Plattformen kjenner igjen hvert landemerke",
+        "body": "GPS kryssreferansert mot vår database med 40 000 POI-er. Marksburg slott, Loreley-fjellet og 6 andre landemerker er festet og klare innen 200 ms etter at de er innenfor rekkevidde.",
+        "stat": { "value": "200ms", "label": "Gjenkjenningsforsinkelse" }
+      },
+      "story": {
+        "eyebrow": "Scene 3 av 5 — Kontekstuell historie",
+        "heading": "Marksburg slott — historien utfolder seg",
+        "body": "Bygget i 1117 er Marksburg den eneste Rhinfestningen som aldri er blitt ødelagt i krig. Gjestene trykker på varselet og mottar en rik fortelling — historie, arkitektur, legender — til nøyaktig rett tid.",
+        "stat": { "value": "94 %", "label": "Innholdsengasjementsrate" }
+      },
+      "panoramic": {
+        "eyebrow": "Scene 4 av 5 — Panoramautforskning",
+        "heading": "Hele landskapet, annotert",
+        "body": "Roter telefonen til liggende format, og visningen forvandles til et annotert panoramalag. Hvert element i horisonten navngitt, hver historie tilgjengelig med et trykk.",
+        "stat": { "value": "8,4×", "label": "Økning i tid på innhold" }
+      },
+      "local": {
+        "eyebrow": "Scene 5 av 5 — Lokal tilknytning",
+        "heading": "Utover sightseeing — ekte opplevelser",
+        "body": "Curated Lens fremhever kuraterte lokale anbefalinger: Riesling-gården 400 m fra kaia, den familiedrevne restauranten som har servert regionale spesialiteter siden 1892.",
+        "stat": { "value": "68 %", "label": "Gjester som bestiller lokale opplevelser" }
+      }
+    },
+    "poiCategories": {
+      "history": "Historie",
+      "nature": "Natur",
+      "food": "Mat og drikke",
+      "culture": "Kultur",
+      "experience": "Opplevelse",
+      "local": "Lokalt"
+    },
+    "phoneUi": {
+      "appName": "Curated Lens",
+      "nearby": "I nærheten",
+      "tapToExplore": "Trykk for å utforske",
+      "audioGuide": "Lydguide",
+      "listen": "Lytt",
+      "readMore": "Les mer",
+      "landmark": "Landemerke oppdaget",
+      "castleName": "Marksburg slott",
+      "castleDesc": "Den eneste Rhinfestningen som aldri er blitt ødelagt i krig.",
+      "builtLabel": "Bygget",
+      "builtYear": "1117",
+      "styleLabel": "Stil",
+      "styleName": "Rhinsk romansk",
+      "statusLabel": "Status",
+      "statusName": "UNESCO-listet",
+      "panoramicMode": "Panoramamodus",
+      "rotateTip": "Roter for å utforske",
+      "localTitle": "Lokale opplevelser",
+      "rieslingName": "Weingut Lahnstein",
+      "rieslingDist": "400 m fra kaia",
+      "rieslingDesc": "Prisbelønnet Riesling-gård, åpen for smaksprøver.",
+      "restaurantName": "Gasthaus Zum Anker",
+      "restaurantDist": "600 m fra kaia",
+      "restaurantDesc": "Familieoppskrifter siden 1892, regionale spesialiteter.",
+      "bookTable": "Bestill bord",
+      "bookTasting": "Bestill smaksprøve",
+      "discoverLabel": "Oppdager omgivelsene dine...",
+      "radarLabel": "Skanner etter interessepunkter",
+      "poisFound": "8 interessepunkter funnet",
+      "poisFoundShort": "8 POI-er i rekkevidde"
+    }
+  },
+  "phaseConclusion": {
+    "insightsTitle": "Engasjementsinnsikt",
+    "insightsSubtitle": "Rhindalen-ruten — Siste 30 dager",
+    "journalTitle": "Digitalt reisejournal",
+    "journalSubtitle": "Merkevaresuvenir for hver gjest",
+    "journalRoute": "Rhindalen",
+    "journalYourJourney": "Din reise",
+    "ctaEyebrow": "Klar til å transformere gjesteopplevelsen?",
+    "ctaHeading1": "En bakke er bare en bakke",
+    "ctaHeading2": "– inntil du kjenner historien",
+    "ctaBody": "Bli med Viking, Scenic og andre premiumoperatører som bruker Curated Lens til å gjøre passiv sightseeing om til stedsorientert historiefortelling i sanntid.",
+    "ctaButton": "Planlegg en privat demo",
+    "trustBadge": "Betrodd av 40+ premiumoperatører verden over",
+    "stats": {
+      "interactions": "Totale interaksjoner",
+      "avgTime": "Gjennomsnittlig tid per POI",
+      "audioListens": "Lydavspillinger"
+    },
+    "chartLabels": {
+      "marksburg": "Marksburg slott",
+      "lorelei": "Loreley-fjellet",
+      "bacharach": "Bacharach landsby",
+      "drachenfels": "Drachenfels ruiner"
+    },
+    "voiceInsights": "Se hva gjestene dine virkelig brydde seg om, og bruk det til å forbedre hver fremtidig reise."
+  },
+  "scrollHint": "Rull for å utforske",
+  "languageSwitcher": {
+    "label": "Språk",
+    "choose": "Velg språk"
+  }
+}
