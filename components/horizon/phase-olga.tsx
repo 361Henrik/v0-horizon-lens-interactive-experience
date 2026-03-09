@@ -11,6 +11,14 @@ import {
 } from "lucide-react"
 import { MacBookFrame } from "./device-frame"
 import { VoiceBubble } from "./voice-bubble"
+import {
+  RouteMapScreen,
+  POIListScreen,
+  ContentTiersScreen,
+  ToneSliderScreen,
+  ReviewScreen,
+  PublishScreen,
+} from "./screen-content"
 
 interface PhaseOlgaProps {
   scrollProgress: MotionValue<number>
@@ -26,8 +34,7 @@ const features = [
     voice:
       "Draw the path your ship sails, and we'll find every story along the way.",
     icon: Map,
-    screenTitle: "Route Definition",
-    screenContent: "Interactive map with geo-bounded corridor overlay",
+    ScreenComponent: RouteMapScreen,
   },
   {
     id: "poi",
@@ -38,8 +45,7 @@ const features = [
     voice:
       "The system discovers every point of interest your guests will wonder about.",
     icon: MapPin,
-    screenTitle: "POI Ingestion",
-    screenContent: "Auto-discovered landmarks populating the route",
+    ScreenComponent: POIListScreen,
   },
   {
     id: "content",
@@ -50,8 +56,7 @@ const features = [
     voice:
       "From quick facts to cinematic deep-dives, every tier is pre-baked and ready.",
     icon: Layers,
-    screenTitle: "Content Tiers",
-    screenContent: "L0 through L3 content layers stacking",
+    ScreenComponent: ContentTiersScreen,
   },
   {
     id: "tone",
@@ -61,8 +66,7 @@ const features = [
       "Slide between Formal Historian and Branded Luxury. Your brand voice infuses every word.",
     voice: "Dial in your brand's voice — from scholarly to indulgent.",
     icon: SlidersHorizontal,
-    screenTitle: "Brand Voice",
-    screenContent: "Tone slider from Formal Historian to Branded Luxury",
+    ScreenComponent: ToneSliderScreen,
   },
   {
     id: "review",
@@ -72,8 +76,7 @@ const features = [
       "Nothing goes live without your explicit approval. Flag, edit, or approve every piece of content.",
     voice: "Nothing reaches your guests without your seal of approval.",
     icon: ShieldCheck,
-    screenTitle: "Approval Queue",
-    screenContent: "Content review and approval interface",
+    ScreenComponent: ReviewScreen,
   },
   {
     id: "publish",
@@ -83,8 +86,7 @@ const features = [
       "One-click publishing generates QR codes, web links, and offline packages instantly.",
     voice: "One click. Every channel. Instantly live.",
     icon: Rocket,
-    screenTitle: "Publish & Distribute",
-    screenContent: "QR code generation and multi-channel deployment",
+    ScreenComponent: PublishScreen,
   },
 ]
 
@@ -104,13 +106,12 @@ export function PhaseOlga({ scrollProgress }: PhaseOlgaProps) {
     <div className="w-[200vw] h-full shrink-0 relative flex items-center justify-center">
       {/* MacBook centered */}
       <MacBookFrame opacity={macOpacity} scale={macScale}>
-        <div className="w-full h-full relative">
-          {features.map((feature, i) => (
+        <div className="w-full h-full relative overflow-hidden rounded-sm">
+          {features.map((feature) => (
             <ScreenPanel
               key={feature.id}
               feature={feature}
               scrollProgress={scrollProgress}
-              index={i}
             />
           ))}
         </div>
@@ -132,11 +133,9 @@ export function PhaseOlga({ scrollProgress }: PhaseOlgaProps) {
 function ScreenPanel({
   feature,
   scrollProgress,
-  index,
 }: {
   feature: (typeof features)[0]
   scrollProgress: MotionValue<number>
-  index: number
 }) {
   const [start, end] = feature.range
   const opacity = useTransform(
@@ -145,41 +144,51 @@ function ScreenPanel({
     [0, 1, 1, 0]
   )
 
-  const Icon = feature.icon
-  const gradients = [
-    "from-amber-500/20 to-amber-500/5",
-    "from-sky-500/20 to-sky-500/5",
-    "from-emerald-500/20 to-emerald-500/5",
-    "from-orange-500/20 to-orange-500/5",
-    "from-rose-500/20 to-rose-500/5",
-    "from-teal-500/20 to-teal-500/5",
-  ]
+  // Calculate inner progress for screen animations (0 to 1 within the range)
+  const innerProgress = useTransform(scrollProgress, [start, end], [0, 1])
+  const ScreenComponent = feature.ScreenComponent
 
   return (
     <motion.div
       style={{ opacity }}
-      className="absolute inset-0 flex flex-col items-center justify-center p-6"
+      className="absolute inset-0"
     >
-      <div
-        className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${gradients[index]} flex items-center justify-center mb-3`}
-      >
-        <Icon className="w-6 h-6 text-primary" />
-      </div>
-      <h3 className="font-serif text-base font-semibold text-foreground">
-        {feature.screenTitle}
-      </h3>
-      <p className="text-[10px] text-muted-foreground mt-1 max-w-[260px] text-center">
-        {feature.screenContent}
-      </p>
-      {/* Decorative progress bars */}
-      <div className="w-full max-w-[240px] space-y-1.5 mt-4">
-        <div className="h-1.5 bg-primary/20 rounded-full" />
-        <div className="h-1.5 bg-primary/10 rounded-full w-3/4" />
-        <div className="h-1.5 bg-primary/5 rounded-full w-1/2" />
-      </div>
+      <ScreenPanelContent 
+        ScreenComponent={ScreenComponent} 
+        scrollProgress={scrollProgress}
+        range={feature.range}
+      />
     </motion.div>
   )
 }
+
+function ScreenPanelContent({
+  ScreenComponent,
+  scrollProgress,
+  range,
+}: {
+  ScreenComponent: React.ComponentType<{ progress: number }>
+  scrollProgress: MotionValue<number>
+  range: [number, number]
+}) {
+  const [start, end] = range
+  const progress = useTransform(scrollProgress, [start, end], [0, 1])
+  
+  // Use state to track the current progress value
+  const [currentProgress, setCurrentProgress] = React.useState(0)
+  
+  React.useEffect(() => {
+    const unsubscribe = progress.on("change", (v) => {
+      setCurrentProgress(Math.min(1, Math.max(0, v)))
+    })
+    return () => unsubscribe()
+  }, [progress])
+
+  return <ScreenComponent progress={currentProgress} />
+}
+
+// Need to import React for the hooks
+import * as React from "react"
 
 function FeatureCallout({
   feature,
@@ -196,6 +205,11 @@ function FeatureCallout({
     scrollProgress,
     [start, start + 0.02, end - 0.02, end],
     [0, 1, 1, 0]
+  )
+  const calloutX = useTransform(
+    scrollProgress,
+    [start, start + 0.02, end - 0.02, end],
+    [60, 0, 0, -60]
   )
   const calloutScale = useTransform(
     scrollProgress,
@@ -216,34 +230,60 @@ function FeatureCallout({
   const isTop = index % 2 === 0
   const Icon = feature.icon
 
+  // Calculate callout position based on index
+  const positions = [
+    { top: "top-[14%]", left: "left-[6%]" },
+    { top: "bottom-[18%]", left: "right-[6%]" },
+    { top: "top-[18%]", left: "right-[8%]" },
+    { top: "bottom-[14%]", left: "left-[8%]" },
+    { top: "top-[16%]", left: "left-[6%]" },
+    { top: "bottom-[16%]", left: "right-[6%]" },
+  ]
+  const pos = positions[index]
+
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      {/* Callout bubble */}
+      {/* Callout bubble with flowing animation */}
       <motion.div
-        style={{ opacity: calloutOpacity, scale: calloutScale }}
-        className={`absolute ${isTop ? "top-[12%]" : "bottom-[12%]"} ${index % 3 === 0 ? "left-[8%]" : index % 3 === 1 ? "right-[8%]" : "left-[12%]"}`}
+        style={{ opacity: calloutOpacity, x: calloutX, scale: calloutScale }}
+        className={`absolute ${pos.top} ${pos.left}`}
       >
-        <div className="glass-panel rounded-xl p-4 max-w-[280px]">
-          <div className="flex items-start gap-3">
-            <div className="shrink-0 w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-              <Icon className="w-4 h-4 text-primary" />
-            </div>
+        <motion.div 
+          className="glass-panel rounded-xl p-4 max-w-[300px] relative"
+          whileHover={{ scale: 1.02 }}
+        >
+          {/* Animated border glow */}
+          <div className="absolute inset-0 rounded-xl border border-primary/20 animate-pulse" />
+          
+          <div className="flex items-start gap-3 relative">
+            <motion.div 
+              className="shrink-0 w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center"
+              animate={{ 
+                boxShadow: ["0 0 0px hsl(var(--primary) / 0.3)", "0 0 20px hsl(var(--primary) / 0.3)", "0 0 0px hsl(var(--primary) / 0.3)"]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Icon className="w-5 h-5 text-primary" />
+            </motion.div>
             <div>
               <h4 className="font-serif text-sm font-semibold text-foreground leading-tight">
                 {feature.title}
               </h4>
-              <p className="text-[10px] text-muted-foreground leading-relaxed mt-1">
+              <p className="text-[11px] text-muted-foreground leading-relaxed mt-1.5">
                 {feature.description}
               </p>
             </div>
           </div>
-        </div>
+          
+          {/* Connecting line hint */}
+          <div className="absolute -right-4 top-1/2 w-4 h-px bg-gradient-to-r from-primary/40 to-transparent" />
+        </motion.div>
       </motion.div>
 
       {/* Voice bubble */}
       <motion.div
         style={{ opacity: voiceOpacity }}
-        className={`absolute ${isTop ? "bottom-[14%]" : "top-[14%]"} ${index % 2 === 0 ? "right-[6%]" : "left-[6%]"}`}
+        className={`absolute ${isTop ? "bottom-[14%]" : "top-[14%]"} ${index % 2 === 0 ? "right-[8%]" : "left-[8%]"}`}
       >
         <VoiceBubble text={feature.voice} opacity={voiceOpacity} y={voiceY} />
       </motion.div>
