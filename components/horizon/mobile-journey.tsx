@@ -3,6 +3,7 @@
 import * as React from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { Ship, Anchor, Train, ChevronDown } from "lucide-react"
+import { useI18n } from "@/lib/i18n"
 
 // Reuse PoiIcon inline for mobile to avoid import coupling
 function PoiIcon({ type, className = "w-5 h-5" }: { type: string; className?: string }) {
@@ -253,13 +254,24 @@ function FeatureCard({
   )
 }
 
-const travelModes = [
-  { label: "River Cruise", icon: Ship, active: true },
-  { label: "Ocean Cruise", icon: Anchor, active: false },
-  { label: "Luxury Rail", icon: Train, active: false },
-]
-
 export function MobileJourney() {
+  const { t } = useI18n()
+  
+  const travelModes = [
+    { label: t.landing.modes.riverCruise, icon: Ship, active: true },
+    { label: t.landing.modes.oceanCruise, icon: Anchor, active: false },
+    { label: t.landing.modes.luxuryRail, icon: Train, active: false },
+  ]
+
+  const categories = [
+    { type: "history", label: t.phaseHelmut.poiCategories.history },
+    { type: "nature", label: t.phaseHelmut.poiCategories.nature },
+    { type: "food", label: t.phaseHelmut.poiCategories.food },
+    { type: "culture", label: t.phaseHelmut.poiCategories.culture },
+    { type: "experience", label: t.phaseHelmut.poiCategories.experience },
+    { type: "local", label: t.phaseHelmut.poiCategories.local },
+  ]
+
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-background">
       {/* Hero */}
@@ -282,7 +294,7 @@ export function MobileJourney() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            Introducing
+            {t.landing.introducing}
           </motion.span>
 
           <motion.h1
@@ -301,7 +313,7 @@ export function MobileJourney() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
           >
-            Discover the stories around you. Location-aware storytelling that reveals the meaning behind every landmark.
+            {t.landing.tagline} {t.landing.subtitle}
           </motion.p>
 
           {/* Mode selector */}
@@ -335,7 +347,7 @@ export function MobileJourney() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
           >
-            Rhine Valley Demo Route
+            {t.landing.demoRoute}
           </motion.p>
         </div>
 
@@ -345,7 +357,7 @@ export function MobileJourney() {
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <span className="text-[10px] text-muted-foreground/50 uppercase tracking-wider font-sans">Explore</span>
+          <span className="text-[10px] text-muted-foreground/50 uppercase tracking-wider font-sans">{t.scrollHint}</span>
           <ChevronDown className="w-4 h-4 text-primary/50" />
         </motion.div>
       </section>
@@ -353,25 +365,18 @@ export function MobileJourney() {
       {/* Concept explanation */}
       <section className="px-6 py-16 max-w-lg mx-auto">
         <RevealSection>
-          <span className="text-[10px] uppercase tracking-[0.3em] text-primary/60 font-sans">The Idea</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-primary/60 font-sans">{t.phaseConclusion.ctaEyebrow}</span>
           <h2 className="font-serif text-3xl font-semibold text-foreground mt-2 mb-4 text-balance">
-            A hill is just a hill until you know its story
+            {t.phaseConclusion.ctaHeading1} {t.phaseConclusion.ctaHeading2}
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed font-sans">
-            Curated Lens is a location-aware storytelling platform that detects Points of Interest around travelers in real time — surfacing verified stories, audio narrations, and local experiences before they even have to ask.
+            {t.phaseConclusion.ctaBody}
           </p>
         </RevealSection>
 
         {/* Category grid */}
         <div className="grid grid-cols-3 gap-2 mt-8">
-          {[
-            { type: "history", label: "History" },
-            { type: "nature", label: "Nature" },
-            { type: "food", label: "Food" },
-            { type: "culture", label: "Culture" },
-            { type: "experience", label: "Experiences" },
-            { type: "local", label: "Local" },
-          ].map((cat, i) => (
+          {categories.map((cat, i) => (
             <RevealSection key={cat.type}>
               <motion.div
                 className="flex flex-col items-center gap-2 p-3 rounded-xl border border-border/20 bg-card/30"
@@ -446,14 +451,14 @@ export function MobileJourney() {
         <RevealSection>
           <div className="flex flex-col items-center gap-6">
             <span className="text-[10px] uppercase tracking-[0.3em] text-primary/60 font-sans">
-              Ready to transform your guest experience?
+              {t.phaseConclusion.ctaEyebrow}
             </span>
             <h2 className="font-serif text-3xl font-semibold text-balance text-foreground">
-              <span className="shimmer-text">Every Mile,</span>
-              <br />A Story Told
+              <span className="shimmer-text">{t.phaseConclusion.ctaHeading1}</span>
+              <br />{t.phaseConclusion.ctaHeading2}
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Join premium operators using Curated Lens to reveal the world to their travelers.
+              {t.phaseConclusion.ctaBody}
             </p>
             <motion.button
               className="w-full py-4 rounded-2xl bg-primary/20 border border-primary/40 text-sm font-sans text-foreground uppercase tracking-[0.15em]"
@@ -461,10 +466,10 @@ export function MobileJourney() {
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.15 }}
             >
-              Schedule a Private Demo
+              {t.phaseConclusion.ctaButton}
             </motion.button>
             <p className="text-[10px] text-muted-foreground/50 uppercase tracking-[0.15em] font-sans">
-              Trusted by 40+ premium operators worldwide
+              {t.phaseConclusion.trustBadge}
             </p>
           </div>
         </RevealSection>

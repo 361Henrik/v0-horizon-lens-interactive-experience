@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useI18n } from "@/lib/i18n"
 
 interface PreloaderProps {
   onComplete: () => void
 }
 
 export function Preloader({ onComplete }: PreloaderProps) {
+  const { t } = useI18n()
   const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-[10px] uppercase tracking-[0.5em] text-primary/60 font-sans"
             >
-              Loading Experience
+              {t.landing.introducing}
             </motion.div>
 
             <div className="flex items-center gap-3">
