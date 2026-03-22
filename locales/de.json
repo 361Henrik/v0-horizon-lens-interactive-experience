@@ -169,6 +169,15 @@
     "voiceInsights": "Erfahre, was deine Gäste wirklich interessiert hat, und nutze es zur Verbesserung jeder zukünftigen Reise."
   },
   "scrollHint": "Scrollen zum Erkunden",
+  "progressBar": {
+    "phases": {
+      "landing":  "Start",
+      "operator": "Architekt",
+      "handoff":  "Veröffentlichen",
+      "traveler": "Erleben",
+      "insights": "Einblicke"
+    }
+  },
   "languageSwitcher": {
     "label": "Sprache",
     "choose": "Sprache wählen"

@@ -169,6 +169,15 @@
     "voiceInsights": "See what your guests truly cared about, and use it to improve every future voyage."
   },
   "scrollHint": "Scroll to explore",
+  "progressBar": {
+    "phases": {
+      "landing":  "Begin",
+      "operator": "Architect",
+      "handoff":  "Publish",
+      "traveler": "Experience",
+      "insights": "Insights"
+    }
+  },
   "languageSwitcher": {
     "label": "Language",
     "choose": "Choose language"

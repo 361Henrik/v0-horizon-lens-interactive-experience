@@ -169,6 +169,15 @@
     "voiceInsights": "Se hva gjestene dine virkelig brydde seg om, og bruk det til å forbedre hver fremtidig reise."
   },
   "scrollHint": "Rull for å utforske",
+  "progressBar": {
+    "phases": {
+      "landing":  "Start",
+      "operator": "Arkitekt",
+      "handoff":  "Publiser",
+      "traveler": "Opplev",
+      "insights": "Innsikt"
+    }
+  },
   "languageSwitcher": {
     "label": "Språk",
     "choose": "Velg språk"

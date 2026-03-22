@@ -8,6 +8,7 @@ import { PhaseHelmut } from "./phase-helmut"
 import { PhaseConclusion } from "./phase-conclusion"
 import { ProgressBar } from "./progress-bar"
 import { Atmosphere } from "./atmosphere"
+import { LanguageSwitcher } from "./language-switcher"
 import { SmoothScrollProvider, useSmoothScroll } from "./smooth-scroll-provider"
 
 const TOTAL_WIDTH_VW = 600
@@ -94,6 +95,11 @@ function JourneyContent({ isReady }: { isReady: boolean }) {
 
       {/* Progress bar (fixed UI) */}
       <ProgressBar scrollProgress={scrollProgress} />
+
+      {/* Language switcher — top-right fixed overlay */}
+      <div className="absolute top-5 right-5 z-50">
+        <LanguageSwitcher />
+      </div>
 
       {/* Atmospheric effects (particles, grain, cursor glow) */}
       <Atmosphere />

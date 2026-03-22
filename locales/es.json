@@ -169,6 +169,15 @@
     "voiceInsights": "Descubre lo que realmente les importó a tus huéspedes y úsalo para mejorar cada futuro viaje."
   },
   "scrollHint": "Desplázate para explorar",
+  "progressBar": {
+    "phases": {
+      "landing":  "Inicio",
+      "operator": "Arquitecto",
+      "handoff":  "Publicar",
+      "traveler": "Experiencia",
+      "insights": "Resultados"
+    }
+  },
   "languageSwitcher": {
     "label": "Idioma",
     "choose": "Elegir idioma"

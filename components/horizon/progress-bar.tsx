@@ -3,28 +3,38 @@
 import * as React from "react"
 import { motion, type MotionValue, useTransform, AnimatePresence } from "framer-motion"
 import { useSmoothScroll } from "./smooth-scroll-provider"
+import { useI18n } from "@/lib/i18n"
 
 interface ProgressBarProps {
   scrollProgress: MotionValue<number>
 }
 
-const phases = [
-  { label: "Begin", position: 0, id: "landing" },
-  { label: "Architect", position: 0.15, id: "olga" },
-  { label: "Publish", position: 0.48, id: "transition" },
-  { label: "Experience", position: 0.60, id: "helmut" },
-  { label: "Insights", position: 0.87, id: "conclusion" },
+const PHASE_POSITIONS = [
+  { position: 0,    id: "landing"    },
+  { position: 0.15, id: "operator"   },
+  { position: 0.48, id: "handoff"    },
+  { position: 0.60, id: "traveler"   },
+  { position: 0.87, id: "insights"   },
 ]
 
 function getActivePhase(progress: number): number {
-  for (let i = phases.length - 1; i >= 0; i--) {
-    if (progress >= phases[i].position) return i
+  for (let i = PHASE_POSITIONS.length - 1; i >= 0; i--) {
+    if (progress >= PHASE_POSITIONS[i].position) return i
   }
   return 0
 }
 
 export function ProgressBar({ scrollProgress }: ProgressBarProps) {
+  const { t } = useI18n()
   const { scrollTo } = useSmoothScroll()
+
+  const phases = React.useMemo(() => [
+    { label: t.progressBar.phases.landing,  ...PHASE_POSITIONS[0] },
+    { label: t.progressBar.phases.operator, ...PHASE_POSITIONS[1] },
+    { label: t.progressBar.phases.handoff,  ...PHASE_POSITIONS[2] },
+    { label: t.progressBar.phases.traveler, ...PHASE_POSITIONS[3] },
+    { label: t.progressBar.phases.insights, ...PHASE_POSITIONS[4] },
+  ], [t])
   const width = useTransform(scrollProgress, [0, 1], ["0%", "100%"])
   const labelOpacity = useTransform(scrollProgress, [0, 0.05], [0, 1])
   
@@ -76,7 +86,6 @@ export function ProgressBar({ scrollProgress }: ProgressBarProps) {
             {phases.map((phase, i) => {
               const isActive = i === activePhase
               const isCompleted = i < activePhase
-              const isCurrent = i === activePhase
 
               return (
                 <motion.button
